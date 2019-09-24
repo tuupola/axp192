@@ -30,27 +30,23 @@ SOFTWARE.
 
 static const char* TAG = "axp192";
 
-static inline void _i2c_master_write(uint8_t reg, uint8_t data, uint16_t size)
+static inline void _i2c_master_write(uint8_t reg, uint8_t data)
 {
-    uint8_t buffer[1];
-    buffer[0] = data;
-    i2c_hal_master_write(AXP192_ADDRESS, reg, buffer, size);
+    i2c_hal_master_write(AXP192_ADDRESS, reg, &data, 1);
 }
 
 void axp192_init()
 {
-    // uint8_t buffer[1];
-
     ESP_LOGI(TAG, "Initializing AXP192 at address %d.", AXP192_ADDRESS);
 
-    _i2c_master_write(AXP192_EXTEN_DCDC2, 0xff, 1);
-    _i2c_master_write(AXP192_LDO23_VOLTAGE, 0xff, 1);
-    _i2c_master_write(AXP192_ADC_ENA1, 0xff, 1);
-    _i2c_master_write(AXP192_CHARGE_CTRL1, 0xc0, 1);
-    _i2c_master_write(AXP192_DCDC13_LDO23, 0x4d, 1);
-    _i2c_master_write(AXP192_PEK, 0x5c, 1);
-    _i2c_master_write(AXP192_GPIO0, 0x02, 1);
-    _i2c_master_write(AXP192_VOFF, 0x04, 1);
+    _i2c_master_write(AXP192_EXTEN_DCDC2, 0xff);
+    _i2c_master_write(AXP192_LDO23_VOLTAGE, 0xff);
+    _i2c_master_write(AXP192_ADC_ENA1, 0xff);
+    _i2c_master_write(AXP192_CHARGE_CTRL1, 0xc0);
+    _i2c_master_write(AXP192_DCDC13_LDO23, 0x4d);
+    _i2c_master_write(AXP192_PEK, 0x5c);
+    _i2c_master_write(AXP192_GPIO0, 0x02);
+    _i2c_master_write(AXP192_VOFF, 0x04);
 
 }
 
