@@ -25,7 +25,6 @@ SOFTWARE.
 #include <stdint.h>
 #include <esp_log.h>
 
-#include "esp_i2c_hal.h"
 #include "axp192.h"
 
 static const char* TAG = "axp192";

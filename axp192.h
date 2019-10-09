@@ -46,7 +46,11 @@ extern "C" {
 
 void axp192_init();
 
-//extern i2c_hal_err_t i2c_hal_master_write(uint8_t address, uint8_t register, uint8_t *buffer, uint16_t size);
+/* These should be provided by the HAL. */
+extern int32_t i2c_hal_master_init();
+extern int32_t i2c_hal_master_read(uint8_t address, uint8_t reg, uint8_t *buffer, uint16_t size);
+extern int32_t i2c_hal_master_write(uint8_t address, uint8_t reg, uint8_t *buffer, uint16_t size);
+extern int32_t i2c_hal_master_close();
 
 #ifdef __cplusplus
 }
