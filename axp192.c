@@ -31,16 +31,18 @@ SOFTWARE.
 
 #include "axp192.h"
 
-static const char* TAG = "axp192";
+i2c_read_t i2c_read;
+i2c_write_t i2c_write;
 
 static inline void _i2c_master_write(uint8_t reg, uint8_t data)
 {
-    i2c_hal_master_write(AXP192_ADDRESS, reg, &data, 1);
+    i2c_write(AXP192_ADDRESS, reg, &data, 1);
 }
 
-void axp192_init()
+void axp192_init(i2c_read_t i2c_read_ptr, i2c_write_t i2c_write_ptr)
 {
-    ESP_LOGI(TAG, "Initializing AXP192 at address %d.", AXP192_ADDRESS);
+    i2c_read = i2c_read_ptr;
+    i2c_write = i2c_write_ptr;
 
     _i2c_master_write(AXP192_EXTEN_DCDC2, 0xff);
     _i2c_master_write(AXP192_LDO23_VOLTAGE, 0xff);
