@@ -48,11 +48,17 @@ extern "C" {
 #define AXP192_GPIO0            (0x90)
 #define AXP192_VOFF             (0x31)
 
-/* These should be provided by the HAL. */
-typedef int32_t (*i2c_read_t)(uint8_t address, uint8_t reg, uint8_t *buffer, uint16_t size);
-typedef int32_t (*i2c_write_t)(uint8_t address, uint8_t reg, uint8_t *buffer, uint16_t size);
+typedef struct {
+    uint8_t command;
+    uint8_t data[2];
+    uint8_t count;
+} axp192_init_command_t;
 
-void axp192_init(i2c_read_t i2c_read_ptr, i2c_write_t i2c_write_ptr);
+/* These should be provided by the HAL. */
+typedef int32_t (* i2c_read_fn)(uint8_t address, uint8_t reg, uint8_t *buffer, uint16_t size);
+typedef int32_t (* i2c_write_fn)(uint8_t address, uint8_t reg, const uint8_t *buffer, uint16_t size);
+
+void axp192_init(i2c_read_fn i2c_read_ptr, i2c_write_fn i2c_write_ptr);
 
 #ifdef __cplusplus
 }

@@ -27,31 +27,49 @@ SOFTWARE.
 */
 
 #include <stdint.h>
-#include <esp_log.h>
 
 #include "axp192.h"
 
-i2c_read_t i2c_read;
-i2c_write_t i2c_write;
+static i2c_read_fn i2c_read;
+static i2c_write_fn i2c_write;
+static const uint8_t DELAY_BIT = 1 << 7;
 
-static inline void _i2c_master_write(uint8_t reg, uint8_t data)
-{
-    i2c_write(AXP192_ADDRESS, reg, &data, 1);
-}
+static const axp192_init_command_t init_commands[] = {
+    //{MIPI_DCS_SOFT_RESET, {0}, 0 | DELAY_BIT},
+    {AXP192_EXTEN_DCDC2, {0xff}, 1},
+    {AXP192_LDO23_VOLTAGE, {0xff}, 1},
+    {AXP192_ADC_ENA1, {0xff}, 1},
+    {AXP192_CHARGE_CTRL1, {0xc0}, 1},
+    {AXP192_DCDC13_LDO23, {0x4d}, 1},
+    {AXP192_PEK, {0x5c}, 1},
+    {AXP192_GPIO0, {0x02}, 1},
+    {AXP192_VOFF, {0x04}, 1},
 
-void axp192_init(i2c_read_t i2c_read_ptr, i2c_write_t i2c_write_ptr)
+    /* End of commands . */
+    {0, {0}, 0xff},
+};
+
+void axp192_init(i2c_read_fn i2c_read_ptr, i2c_write_fn i2c_write_ptr)
 {
+    uint8_t cmd = 0;
+
+    /* Assign pointers to hal functions. */
     i2c_read = i2c_read_ptr;
     i2c_write = i2c_write_ptr;
 
-    _i2c_master_write(AXP192_EXTEN_DCDC2, 0xff);
-    _i2c_master_write(AXP192_LDO23_VOLTAGE, 0xff);
-    _i2c_master_write(AXP192_ADC_ENA1, 0xff);
-    _i2c_master_write(AXP192_CHARGE_CTRL1, 0xc0);
-    _i2c_master_write(AXP192_DCDC13_LDO23, 0x4d);
-    _i2c_master_write(AXP192_PEK, 0x5c);
-    _i2c_master_write(AXP192_GPIO0, 0x02);
-    _i2c_master_write(AXP192_VOFF, 0x04);
-
+    /* Send all the commands. */
+    while (init_commands[cmd].count != 0xff) {
+        i2c_write(
+            AXP192_ADDRESS,
+            init_commands[cmd].command,
+            init_commands[cmd].data,
+            init_commands[cmd].count & 0x1f
+        );
+        if (init_commands[cmd].count & DELAY_BIT) {
+            // TODO: delay
+            //vTaskDelay(200 / portTICK_RATE_MS);
+        }
+        cmd++;
+    }
 }
 
