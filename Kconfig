@@ -73,4 +73,63 @@ menu "Output voltage"
             0x00 - 1.8V
 endmenu
 
+menu "ADC control"
+    config AXP192_ADC_ENABLE_1_BIT7_SELECTED
+        bool "Enable BAT boltage ADC"
+    config AXP192_ADC_ENABLE_1_BIT6_SELECTED
+        bool "Enable BAT current ADC"
+    config AXP192_ADC_ENABLE_1_BIT5_SELECTED
+        bool "Enable ACIN voltage ADC"
+    config AXP192_ADC_ENABLE_1_BIT4_SELECTED
+        bool "Enable ACIN current ADC"
+    config AXP192_ADC_ENABLE_1_BIT3_SELECTED
+        bool "Enable VBUS voltage ADC"
+    config AXP192_ADC_ENABLE_1_BIT2_SELECTED
+        bool "Enable VBUS current ADC"
+    config AXP192_ADC_ENABLE_1_BIT1_SELECTED
+        bool "Enable APS voltage ADC"
+    config AXP192_ADC_ENABLE_1_BIT0_SELECTED
+        bool "Enable TS ADC"
+endmenu
+
+config AXP192_ADC_ENABLE_1_BIT7
+    hex
+    default 0x00 if !AXP192_ADC_ENABLE_1_BIT7_SELECTED
+    default 0x80 if AXP192_ADC_ENABLE_1_BIT7_SELECTED
+
+config AXP192_ADC_ENABLE_1_BIT6
+    hex
+    default 0x00 if !AXP192_ADC_ENABLE_1_BIT6_SELECTED
+    default 0x40 if AXP192_ADC_ENABLE_1_BIT6_SELECTED
+
+config AXP192_ADC_ENABLE_1_BIT5
+    hex
+    default 0x00 if !AXP192_ADC_ENABLE_1_BIT5_SELECTED
+    default 0x20 if AXP192_ADC_ENABLE_1_BIT5_SELECTED
+
+config AXP192_ADC_ENABLE_1_BIT4
+    hex
+    default 0x00 if !AXP192_ADC_ENABLE_1_BIT4_SELECTED
+    default 0x10 if AXP192_ADC_ENABLE_1_BIT4_SELECTED
+
+config AXP192_ADC_ENABLE_1_BIT3
+    hex
+    default 0x00 if !AXP192_ADC_ENABLE_1_BIT3_SELECTED
+    default 0x08 if AXP192_ADC_ENABLE_1_BIT3_SELECTED
+
+config AXP192_ADC_ENABLE_1_BIT2
+    hex
+    default 0x00 if !AXP192_ADC_ENABLE_1_BIT2_SELECTED
+    default 0x04 if AXP192_ADC_ENABLE_1_BIT2_SELECTED
+
+config AXP192_ADC_ENABLE_1_BIT1
+    hex
+    default 0x00 if !AXP192_ADC_ENABLE_1_BIT1_SELECTED
+    default 0x02 if AXP192_ADC_ENABLE_1_BIT1_SELECTED
+
+config AXP192_ADC_ENABLE_1_BIT0
+    hex
+    default 0x00 if !AXP192_ADC_ENABLE_1_BIT0_SELECTED
+    default 0x01 if AXP192_ADC_ENABLE_1_BIT0_SELECTED
+
 endmenu
