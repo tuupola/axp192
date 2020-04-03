@@ -29,22 +29,21 @@ SOFTWARE.
 #include <stdint.h>
 
 #include "axp192.h"
+#include "axp192_config.h"
 
 static i2c_read_fn i2c_read;
 static i2c_write_fn i2c_write;
 static const uint8_t DELAY_BIT = 1 << 7;
 
 static const axp192_init_command_t init_commands[] = {
-    //{MIPI_DCS_SOFT_RESET, {0}, 0 | DELAY_BIT},
-    {AXP192_EXTEN_DCDC2, {0xff}, 1},
+    {AXP192_EXTEN_DCDC2_CONTROL, {CONFIG_AXP192_EXTEN_DCDC2_CONTROL}, 1},
     {AXP192_LDO23_VOLTAGE, {0xff}, 1},
-    {AXP192_ADC_ENA1, {0xff}, 1},
-    {AXP192_CHARGE_CTRL1, {0xc0}, 1},
-    {AXP192_DCDC13_LDO23, {0x4d}, 1},
+    {AXP192_ADC_ENABLE_1, {0xff}, 1}, /* Enable all ADCs */
+    {AXP192_CHARGE_CONTROL_1, {0xc0}, 1},
+    {AXP192_DCDC13_LDO23_CONTROL, {CONFIG_AXP192_DCDC13_LDO23_CONTROL}, 1},
     {AXP192_PEK, {0x5c}, 1},
-    {AXP192_GPIO0, {0x02}, 1},
-    {AXP192_VOFF, {0x04}, 1},
-
+    {AXP192_GPIO0_CONTROL, {0x02}, 1},
+    {AXP192_SHUTDOWN_VOLTAGE, {0x04}, 1},
     /* End of commands . */
     {0, {0}, 0xff},
 };

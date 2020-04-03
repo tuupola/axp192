@@ -47,12 +47,15 @@ extern "C" {
 #define AXP192_DATA_CACHE_3             (0x09)
 #define AXP192_DATA_CACHE_4             (0x0a)
 #define AXP192_DATA_CACHE_5             (0x0b)
+/* Output control: 2 EXTEN, 0 DCDC2 */
 #define AXP192_EXTEN_DCDC2_CONTROL      (0x10)
+/* Power output control: 6 EXTEN, 4 DCDC2, 3 LDO3, 2 LDO2, 1 DCDC3, 0 DCDC1 */
 #define AXP192_DCDC13_LDO23_CONTROL     (0x12)
 #define AXP192_DCDC2_VOLTAGE            (0x23)
 #define AXP192_DCDC2_SLOPE              (0x25)
 #define AXP192_DCDC1_VOLTAGE            (0x26)
 #define AXP192_DCDC3_VOLTAGE            (0x27)
+/* Output voltage control: 7-4 LDO2, 3-0 LDO3 */
 #define AXP192_LDO23_VOLTAGE            (0x28)
 #define AXP192_VBUS_IPSOUT_CHANNEL      (0x30)
 #define AXP192_SHUTDOWN_VOLTAGE         (0x31)
