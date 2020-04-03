@@ -51,6 +51,11 @@ extern "C" {
     CONFIG_AXP192_DCDC13_LDO23_CONTROL_BIT0 \
 )
 
+#define CONFIG_AXP192_LDO23_VOLTAGE ( \
+    (CONFIG_AXP192_LDO23_VOLTAGE_BIT74 << 4) | \
+    CONFIG_AXP192_LDO23_VOLTAGE_BIT30 \
+)
+
 #ifdef __cplusplus
 }
 #endif

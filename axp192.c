@@ -37,7 +37,7 @@ static const uint8_t DELAY_BIT = 1 << 7;
 
 static const axp192_init_command_t init_commands[] = {
     {AXP192_EXTEN_DCDC2_CONTROL, {CONFIG_AXP192_EXTEN_DCDC2_CONTROL}, 1},
-    {AXP192_LDO23_VOLTAGE, {0xff}, 1},
+    {AXP192_LDO23_VOLTAGE, {CONFIG_AXP192_LDO23_VOLTAGE}, 1},
     {AXP192_ADC_ENABLE_1, {0xff}, 1}, /* Enable all ADCs */
     {AXP192_CHARGE_CONTROL_1, {0xc0}, 1},
     {AXP192_DCDC13_LDO23_CONTROL, {CONFIG_AXP192_DCDC13_LDO23_CONTROL}, 1},
