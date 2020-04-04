@@ -11,6 +11,10 @@ Where `address` is the I2C address, `reg` is the register to read or write, `buf
 
 ## Usage
 
+```
+$ make menuconfig
+```
+
 ```c
 #include "axp192.h"
 #include "your-i2c-hal.h"
