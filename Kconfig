@@ -132,4 +132,114 @@ config AXP192_ADC_ENABLE_1_BIT0
     default 0x00 if !AXP192_ADC_ENABLE_1_BIT0_SELECTED
     default 0x01 if AXP192_ADC_ENABLE_1_BIT0_SELECTED
 
+
+menu "Charge control"
+    config AXP192_CHARGE_CONTROL_1_BIT7_SELECTED
+        bool "Enable charging"
+
+        config AXP192_CHARGE_CONTROL_1_BIT7
+            hex
+            default 0x00 if !AXP192_CHARGE_CONTROL_1_BIT7_SELECTED
+            default 0x80 if AXP192_CHARGE_CONTROL_1_BIT7_SELECTED
+
+        if AXP192_CHARGE_CONTROL_1_BIT7_SELECTED
+
+            choice AXP192_CHARGE_CONTROL_1_BIT65
+                prompt "Charge target voltage"
+                default AXP192_CHARGE_CONTROL_1_BIT65_42_SELECTED
+                config AXP192_CHARGE_CONTROL_1_BIT65_41_SELECTED
+                    bool "4.1V"
+                config AXP192_CHARGE_CONTROL_1_BIT65_415_SELECTED
+                    bool "4.15V"
+                config AXP192_CHARGE_CONTROL_1_BIT65_42_SELECTED
+                    bool "4.2V"
+                config AXP192_CHARGE_CONTROL_1_BIT65_436_SELECTED
+                    bool "4.36V"
+            endchoice
+
+            config AXP192_CHARGE_CONTROL_1_BIT65
+                hex
+                default 0x00 if AXP192_CHARGE_CONTROL_1_BIT65_41_SELECTED
+                default 0x20 if AXP192_CHARGE_CONTROL_1_BIT65_415_SELECTED
+                default 0x40 if AXP192_CHARGE_CONTROL_1_BIT65_42_SELECTED
+                default 0x60 if AXP192_CHARGE_CONTROL_1_BIT65_436_SELECTED
+
+            choice AXP192_CHARGE_CONTROL_1_BIT30
+                prompt "Charge current"
+                default AXP192_CHARGE_CONTROL_1_BIT30_100_SELECTED
+                config AXP192_CHARGE_CONTROL_1_BIT30_100_SELECTED
+                    bool "100mA"
+                config AXP192_CHARGE_CONTROL_1_BIT30_190_SELECTED
+                    bool "190mA"
+                config AXP192_CHARGE_CONTROL_1_BIT30_280_SELECTED
+                    bool "280mA"
+                config AXP192_CHARGE_CONTROL_1_BIT30_360_SELECTED
+                    bool "360mA"
+                config AXP192_CHARGE_CONTROL_1_BIT30_450_SELECTED
+                    bool "450mA"
+                config AXP192_CHARGE_CONTROL_1_BIT30_550_SELECTED
+                    bool "550mA"
+                config AXP192_CHARGE_CONTROL_1_BIT30_630_SELECTED
+                    bool "630mA"
+                config AXP192_CHARGE_CONTROL_1_BIT30_700_SELECTED
+                    bool "700mA"
+                config AXP192_CHARGE_CONTROL_1_BIT30_780_SELECTED
+                    bool "780mA"
+                config AXP192_CHARGE_CONTROL_1_BIT30_880_SELECTED
+                    bool "880mA"
+                config AXP192_CHARGE_CONTROL_1_BIT30_960_SELECTED
+                    bool "960mA"
+                config AXP192_CHARGE_CONTROL_1_BIT30_1000_SELECTED
+                    bool "1000mA"
+                config AXP192_CHARGE_CONTROL_1_BIT30_1160_SELECTED
+                    bool "1160mA"
+                config AXP192_CHARGE_CONTROL_1_BIT30_1240_SELECTED
+                    bool "1240mA"
+                config AXP192_CHARGE_CONTROL_1_BIT30_1320_SELECTED
+                    bool "1320mA"
+            endchoice
+
+            config AXP192_CHARGE_CONTROL_1_BIT30
+                hex
+                default 0x00 if AXP192_CHARGE_CONTROL_1_BIT30_100_SELECTED
+                default 0x01 if AXP192_CHARGE_CONTROL_1_BIT30_190_SELECTED
+                default 0x02 if AXP192_CHARGE_CONTROL_1_BIT30_280_SELECTED
+                default 0x03 if AXP192_CHARGE_CONTROL_1_BIT30_360_SELECTED
+                default 0x04 if AXP192_CHARGE_CONTROL_1_BIT30_450_SELECTED
+                default 0x05 if AXP192_CHARGE_CONTROL_1_BIT30_550_SELECTED
+                default 0x06 if AXP192_CHARGE_CONTROL_1_BIT30_630_SELECTED
+                default 0x07 if AXP192_CHARGE_CONTROL_1_BIT30_700_SELECTED
+                default 0x08 if AXP192_CHARGE_CONTROL_1_BIT30_780_SELECTED
+                default 0x0a if AXP192_CHARGE_CONTROL_1_BIT30_880_SELECTED
+                default 0x0b if AXP192_CHARGE_CONTROL_1_BIT30_960_SELECTED
+                default 0x0c if AXP192_CHARGE_CONTROL_1_BIT30_1000_SELECTED
+                default 0x0d if AXP192_CHARGE_CONTROL_1_BIT30_1160_SELECTED
+                default 0x0e if AXP192_CHARGE_CONTROL_1_BIT30_1240_SELECTED
+                default 0x0f if AXP192_CHARGE_CONTROL_1_BIT30_1320_SELECTED
+
+            choice AXP192_CHARGE_CONTROL_1_BIT4
+                prompt "Charge end current"
+                help
+                    When charging the battery chargin current will gradually will
+                    gradually drop towards the end. This setting will determine when
+                    to stop the charging process.
+
+                    For example if set to 10% and charge current was set to 1000mA
+                    charging will end when the charging current has dropped to 100mA.
+                default AXP192_CHARGE_CONTROL_1_BIT4_15_SELECTED
+
+                config AXP192_CHARGE_CONTROL_1_BIT4_10_SELECTED
+                    bool "10%"
+                config AXP192_CHARGE_CONTROL_1_BIT4_15_SELECTED
+                    bool "15%"
+            endchoice
+
+            config AXP192_CHARGE_CONTROL_1_BIT4
+                hex
+                default 0x00 if AXP192_CHARGE_CONTROL_1_BIT4_10_SELECTED
+                default 0x10 if AXP192_CHARGE_CONTROL_1_BIT4_15_SELECTED
+
+        endif
+    endmenu
+
 endmenu
