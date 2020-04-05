@@ -94,6 +94,13 @@ void axp192_read(uint8_t reg, float *buffer)
         sensitivity = 0.1;
         offset = -144.7;
         break;
+    case AXP192_BATTERY_POWER:
+        /* 1.1mV * 0.5mA per LSB */
+        sensitivity = 1.1 * 0.5 / 1000;
+        i2c_read(AXP192_ADDRESS, reg, tmp, 3);
+        *buffer = (((tmp[0] << 16) + (tmp[1] << 8) + tmp[2]) * sensitivity) + offset;
+        return;
+        break;
     case AXP192_BATTERY_VOLTAGE:
         /* 1.1mV per LSB */
         sensitivity = 1.1 / 1000;
