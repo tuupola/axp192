@@ -19,7 +19,7 @@ $ make menuconfig
 #include "axp192.h"
 #include "your-i2c-hal.h"
 
-float vacin, iacin;
+float vacin, iacin vvbus, ivbus, temp;
 
 axp192_init(i2c_read, i2c_write);
 axp192_read(AXP192_ACIN_VOLTAGE, &vacin);
