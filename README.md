@@ -19,7 +19,7 @@ $ make menuconfig
 #include "axp192.h"
 #include "your-i2c-hal.h"
 
-float vacin, iacin vvbus, ivbus, temp;
+float vacin, iacin, vvbus, ivbus, temp, vbat, icharge, idischarge;
 
 axp192_init(i2c_read, i2c_write);
 axp192_read(AXP192_ACIN_VOLTAGE, &vacin);
@@ -27,9 +27,18 @@ axp192_read(AXP192_ACIN_CURRENT, &iacin);
 axp192_read(AXP192_VBUS_VOLTAGE, &vvbus);
 axp192_read(AXP192_VBUS_CURRENT, &ivbus);
 axp192_read(AXP192_TEMP, &temp);
+axp192_read(AXP192_BATTERY_VOLTAGE, &vbat);
+axp192_read(AXP192_CHARGE_CURRENT, &icharge);
+axp192_read(AXP192_DISCHARGE_CURRENT, &idischarge);
 
 printf(
-    "vacin: %.3fV iacin: %.3fA vvbus: %.3fV ivbus: %.3fA, temp: %.1fC",
+    "vacin: %.2fV iacin: %.2fA vvbus: %.2fV ivbus: %.2fA temp: %.0fC",
     vacin, iacin, vvbus, ivbus, temp
 );
+
+printf(
+    "vbat: %.2fV ichage: %.2fA idischarge: %.2fA",
+    vbat, icharge, idischarge
+);
+
 ```
