@@ -73,6 +73,7 @@ void axp192_read(uint8_t reg, float *buffer)
 {
     uint8_t tmp[4];
     float sensitivity = 1.0;
+    float offset = 0.0;
 
     switch (reg) {
     case AXP192_ACIN_VOLTAGE:
@@ -88,8 +89,13 @@ void axp192_read(uint8_t reg, float *buffer)
         /* 0.375mA per LSB */
         sensitivity = 0.375 / 1000;
         break;
+    case AXP192_TEMP:
+        /* 0.1C per LSB, 0x00 = -144.7C */
+        sensitivity = 0.1;
+        offset = -144.7;
+        break;
     }
 
     i2c_read(AXP192_ADDRESS, reg, tmp, 2);
-    *buffer = ((tmp[0] << 4) + tmp[1]) * sensitivity;
+    *buffer = (((tmp[0] << 4) + tmp[1]) * sensitivity) + offset;
 }

@@ -24,6 +24,12 @@ float vacin, iacin;
 axp192_init(i2c_read, i2c_write);
 axp192_read(AXP192_ACIN_VOLTAGE, &vacin);
 axp192_read(AXP192_ACIN_CURRENT, &iacin);
+axp192_read(AXP192_VBUS_VOLTAGE, &vvbus);
+axp192_read(AXP192_VBUS_CURRENT, &ivbus);
+axp192_read(AXP192_TEMP, &temp);
 
-printf("vacin: %.3fV iacin: %.3fA", vacin, iacin);
+printf(
+    "vacin: %.3fV iacin: %.3fA vvbus: %.3fV ivbus: %.3fA, temp: %.1fC",
+    vacin, iacin, vvbus, ivbus, temp
+);
 ```

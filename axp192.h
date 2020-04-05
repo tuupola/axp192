@@ -158,6 +158,7 @@ extern "C" {
 #define AXP192_ACIN_CURRENT             AXP192_ACIN_CURRENT_H
 #define AXP192_VBUS_VOLTAGE             AXP192_VBUS_VOLTAGE_H
 #define AXP192_VBUS_CURRENT             AXP192_VBUS_CURRENT_H
+#define AXP192_TEMP                     AXP192_TEMP_H
 
 typedef struct {
     uint8_t command;
