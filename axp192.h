@@ -114,7 +114,7 @@ extern "C" {
 /* TODO: ADC data registers */
 #define AXP192_ACIN_VOLTAGE_H           (0x56)
 #define AXP192_ACIN_VOLTAGE_L           (0x57)
-#define AXP192_ACIN_CURRENT_H           (0x56)
+#define AXP192_ACIN_CURRENT_H           (0x58)
 #define AXP192_ACIN_CURRENT_L           (0x59)
 #define AXP192_VBUS_VOLTAGE_H           (0x5a)
 #define AXP192_VBUS_VOLTAGE_L           (0x5b)
@@ -153,6 +153,12 @@ extern "C" {
 #define AXP192_DISCHARGE_COULOMB_4      (0xb7)
 #define AXP192_COULOMB_COUNTER_CONTROL  (0xb8)
 
+/* Read commands. */
+#define AXP192_ACIN_VOLTAGE             AXP192_ACIN_VOLTAGE_H
+#define AXP192_ACIN_CURRENT             AXP192_ACIN_CURRENT_H
+#define AXP192_VBUS_VOLTAGE             AXP192_VBUS_VOLTAGE_H
+#define AXP192_VBUS_CURRENT             AXP192_VBUS_CURRENT_H
+
 typedef struct {
     uint8_t command;
     uint8_t data[2];
@@ -164,6 +170,7 @@ typedef int32_t (* i2c_read_fn)(uint8_t address, uint8_t reg, uint8_t *buffer, u
 typedef int32_t (* i2c_write_fn)(uint8_t address, uint8_t reg, const uint8_t *buffer, uint16_t size);
 
 void axp192_init(i2c_read_fn i2c_read_ptr, i2c_write_fn i2c_write_ptr);
+void axp192_read(uint8_t reg, float *buffer);
 
 #ifdef __cplusplus
 }

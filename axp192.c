@@ -69,3 +69,27 @@ void axp192_init(i2c_read_fn i2c_read_ptr, i2c_write_fn i2c_write_ptr)
     }
 }
 
+void axp192_read(uint8_t reg, float *buffer)
+{
+    uint8_t tmp[4];
+    float sensitivity = 1.0;
+
+    switch (reg) {
+    case AXP192_ACIN_VOLTAGE:
+    case AXP192_VBUS_VOLTAGE:
+        /* 1.7mV per LSB */
+        sensitivity = 1.7 / 1000;
+        break;
+    case AXP192_ACIN_CURRENT:
+        /* 0.375mA per LSB */
+        sensitivity = 0.625 / 1000;
+        break;
+    case AXP192_VBUS_CURRENT:
+        /* 0.375mA per LSB */
+        sensitivity = 0.375 / 1000;
+        break;
+    }
+
+    i2c_read(AXP192_ADDRESS, reg, tmp, 2);
+    *buffer = ((tmp[0] << 4) + tmp[1]) * sensitivity;
+}
