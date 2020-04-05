@@ -94,6 +94,10 @@ void axp192_read(uint8_t reg, float *buffer)
         sensitivity = 0.1;
         offset = -144.7;
         break;
+    case AXP192_TS_INPUT:
+        /* 0.8mV per LSB */
+        sensitivity = 0.8 / 1000;
+        break;
     case AXP192_BATTERY_POWER:
         /* 1.1mV * 0.5mA per LSB */
         sensitivity = 1.1 * 0.5 / 1000;

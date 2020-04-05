@@ -27,20 +27,16 @@ axp192_read(AXP192_ACIN_CURRENT, &iacin);
 axp192_read(AXP192_VBUS_VOLTAGE, &vvbus);
 axp192_read(AXP192_VBUS_CURRENT, &ivbus);
 axp192_read(AXP192_TEMP, &temp);
+axp192_read(AXP192_TS_INPUT, &vts);
 axp192_read(AXP192_BATTERY_POWER, &pbat);
 axp192_read(AXP192_BATTERY_VOLTAGE, &vbat);
 axp192_read(AXP192_CHARGE_CURRENT, &icharge);
 axp192_read(AXP192_DISCHARGE_CURRENT, &idischarge);
 axp192_read(AXP192_APS_VOLTAGE, &vaps);
 
-printf(
-    "vacin: %.2fV iacin: %.2fA vvbus: %.2fV ivbus: %.2fA temp: %.0fC",
-    vacin, iacin, vvbus, ivbus, temp
-);
-
-printf(
+ESP_LOGI(TAG,
+    "vacin: %.2fV iacin: %.2fA vvbus: %.2fV ivbus: %.2fA vts: %.2fV temp: %.0fC "
     "pbat: %.2fmW vbat: %.2fV icharge: %.2fA idischarge: %.2fA, vaps: %.2fV",
-    pbat, vbat, icharge, idischarge, vaps
+    vacin, iacin, vvbus, ivbus, vts, temp, pbat, vbat, icharge, idischarge, vaps
 );
-
 ```
