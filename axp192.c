@@ -103,6 +103,10 @@ void axp192_read(uint8_t reg, float *buffer)
         /* 0.5mV per LSB */
         sensitivity = 0.5 / 1000;
         break;
+    case AXP192_APS_VOLTAGE:
+        /* 1.4mV per LSB */
+        sensitivity = 0.5 / 1000;
+        break;
     }
 
     i2c_read(AXP192_ADDRESS, reg, tmp, 2);

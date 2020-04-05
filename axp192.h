@@ -163,6 +163,7 @@ extern "C" {
 #define AXP192_BATTERY_VOLTAGE          AXP192_BATTERY_VOLTAGE_H
 #define AXP192_CHARGE_CURRENT           AXP192_CHARGE_CURRENT_H
 #define AXP192_DISCHARGE_CURRENT        AXP192_DISCHARGE_CURRENT_H
+#define AXP192_APS_VOLTAGE              AXP192_APS_VOLTAGE_H
 
 typedef struct {
     uint8_t command;
