@@ -111,38 +111,22 @@ extern "C" {
 #define AXP192_IRQ_STATUS_4             (0x47)
 #define AXP192_IRQ_STATUS_5             (0x4d)
 
-/* TODO: ADC data registers */
-#define AXP192_ACIN_VOLTAGE_H           (0x56)
-#define AXP192_ACIN_VOLTAGE_L           (0x57)
-#define AXP192_ACIN_CURRENT_H           (0x58)
-#define AXP192_ACIN_CURRENT_L           (0x59)
-#define AXP192_VBUS_VOLTAGE_H           (0x5a)
-#define AXP192_VBUS_VOLTAGE_L           (0x5b)
-#define AXP192_VBUS_CURRENT_H           (0x5c)
-#define AXP192_VBUS_CURRENT_L           (0x5d)
-#define AXP192_TEMP_H                   (0x5e)
-#define AXP192_TEMP_L                   (0x5f)
-#define AXP192_TS_INPUT_H               (0x62)
-#define AXP192_TS_INPUT_L               (0x63)
-#define AXP192_GPIO0_VOLTAGE_H          (0x64)
-#define AXP192_GPIO0_VOLTAGE_L          (0x65)
-#define AXP192_GPIO1_VOLTAGE_H          (0x66)
-#define AXP192_GPIO1_VOLTAGE_L          (0x67)
-#define AXP192_GPIO2_VOLTAGE_H          (0x68)
-#define AXP192_GPIO2_VOLTAGE_L          (0x69)
-#define AXP192_GPIO3_VOLTAGE_H          (0x6a)
-#define AXP192_GPIO3_VOLTAGE_L          (0x6b)
-#define AXP192_BATTERY_POWER_H          (0x70)
-#define AXP192_BATTERY_POWER_M          (0x71)
-#define AXP192_BATTERY_POWER_L          (0x72)
-#define AXP192_BATTERY_VOLTAGE_H        (0x78)
-#define AXP192_BATTERY_VOLTAGE_L        (0x79)
-#define AXP192_CHARGE_CURRENT_H         (0x7a)
-#define AXP192_CHARGE_CURRENT_L         (0x7b)
-#define AXP192_DISCHARGE_CURRENT_H      (0x7c)
-#define AXP192_DISCHARGE_CURRENT_L      (0x7d)
-#define AXP192_APS_VOLTAGE_H            (0x7e)
-#define AXP192_APS_VOLTAGE_L            (0x7f)
+/* ADC data registers */
+#define AXP192_ACIN_VOLTAGE             (0x56)
+#define AXP192_ACIN_CURRENT             (0x58)
+#define AXP192_VBUS_VOLTAGE             (0x5a)
+#define AXP192_VBUS_CURRENT             (0x5c)
+#define AXP192_TEMP                     (0x5e)
+#define AXP192_TS_INPUT                 (0x62)
+#define AXP192_GPIO0_VOLTAGE            (0x64)
+#define AXP192_GPIO1_VOLTAGE            (0x66)
+#define AXP192_GPIO2_VOLTAGE            (0x68)
+#define AXP192_GPIO3_VOLTAGE            (0x6a)
+#define AXP192_BATTERY_POWER            (0x70)
+#define AXP192_BATTERY_VOLTAGE          (0x78)
+#define AXP192_CHARGE_CURRENT           (0x7a)
+#define AXP192_DISCHARGE_CURRENT        (0x7c)
+#define AXP192_APS_VOLTAGE              (0x7e)
 #define AXP192_CHARGE_COULOMB_1         (0xb0)
 #define AXP192_CHARGE_COULOMB_2         (0xb1)
 #define AXP192_CHARGE_COULOMB_3         (0xb2)
@@ -152,19 +136,6 @@ extern "C" {
 #define AXP192_DISCHARGE_COULOMB_3      (0xb6)
 #define AXP192_DISCHARGE_COULOMB_4      (0xb7)
 #define AXP192_COULOMB_COUNTER_CONTROL  (0xb8)
-
-/* Read commands. */
-#define AXP192_ACIN_VOLTAGE             AXP192_ACIN_VOLTAGE_H
-#define AXP192_ACIN_CURRENT             AXP192_ACIN_CURRENT_H
-#define AXP192_VBUS_VOLTAGE             AXP192_VBUS_VOLTAGE_H
-#define AXP192_VBUS_CURRENT             AXP192_VBUS_CURRENT_H
-#define AXP192_TEMP                     AXP192_TEMP_H
-#define AXP192_TS_INPUT                 AXP192_TS_INPUT_H
-#define AXP192_BATTERY_POWER            AXP192_BATTERY_POWER_H
-#define AXP192_BATTERY_VOLTAGE          AXP192_BATTERY_VOLTAGE_H
-#define AXP192_CHARGE_CURRENT           AXP192_CHARGE_CURRENT_H
-#define AXP192_DISCHARGE_CURRENT        AXP192_DISCHARGE_CURRENT_H
-#define AXP192_APS_VOLTAGE              AXP192_APS_VOLTAGE_H
 
 typedef struct {
     uint8_t command;
