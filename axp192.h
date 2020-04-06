@@ -41,12 +41,12 @@ extern "C" {
 #define AXP192_POWER_STATUS             (0x00)
 #define AXP192_CHARGE_STATUS            (0x01)
 #define AXP192_OTG_VBUS_STATUS          (0x04)
-#define AXP192_DATA_CACHE_0             (0x06)
-#define AXP192_DATA_CACHE_1             (0x07)
-#define AXP192_DATA_CACHE_2             (0x08)
-#define AXP192_DATA_CACHE_3             (0x09)
-#define AXP192_DATA_CACHE_4             (0x0a)
-#define AXP192_DATA_CACHE_5             (0x0b)
+#define AXP192_DATA_BUFFER0             (0x06)
+#define AXP192_DATA_BUFFER1             (0x07)
+#define AXP192_DATA_BUFFER2             (0x08)
+#define AXP192_DATA_BUFFER3             (0x09)
+#define AXP192_DATA_BUFFER4             (0x0a)
+#define AXP192_DATA_BUFFER5             (0x0b)
 /* Output control: 2 EXTEN, 0 DCDC2 */
 #define AXP192_EXTEN_DCDC2_CONTROL      (0x10)
 /* Power output control: 6 EXTEN, 4 DCDC2, 3 LDO3, 2 LDO2, 1 DCDC3, 0 DCDC1 */
@@ -137,6 +137,15 @@ extern "C" {
 #define AXP192_DISCHARGE_COULOMB_4      (0xb7)
 #define AXP192_COULOMB_COUNTER_CONTROL  (0xb8)
 
+
+/* IOCTL commands */
+#define	AXP192_IOCTL_WRITE         (0x00)
+#define	AXP192_IOCTL_READ          (0x01)
+
+#define	AXP192_READ_POWER_STATUS   ((AXP192_POWER_STATUS << 1) | AXP192_IOCTL_READ)
+#define	AXP192_READ_CHARGE_STATUS  ((AXP192_CHARGE_STATUS << 1) | AXP192_IOCTL_READ)
+
+
 typedef struct {
     uint8_t command;
     uint8_t data[2];
@@ -149,6 +158,7 @@ typedef int32_t (* i2c_write_fn)(uint8_t address, uint8_t reg, const uint8_t *bu
 
 void axp192_init(i2c_read_fn i2c_read_ptr, i2c_write_fn i2c_write_ptr);
 void axp192_read(uint8_t reg, float *buffer);
+void axp192_ioctl(uint16_t command, uint8_t *buffer);
 
 #ifdef __cplusplus
 }

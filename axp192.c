@@ -123,3 +123,15 @@ void axp192_read(uint8_t reg, float *buffer)
     i2c_read(AXP192_ADDRESS, reg, tmp, 2);
     *buffer = (((tmp[0] << 4) + tmp[1]) * sensitivity) + offset;
 }
+
+void axp192_ioctl(uint16_t command, uint8_t *buffer)
+{
+    uint8_t reg = command >> 1;
+
+    switch (command) {
+    case AXP192_READ_POWER_STATUS:
+    case AXP192_READ_CHARGE_STATUS:
+        i2c_read(AXP192_ADDRESS, reg, buffer, 1);
+        break;
+    }
+}
