@@ -116,7 +116,7 @@ void axp192_read(uint8_t reg, float *buffer)
         break;
     case AXP192_APS_VOLTAGE:
         /* 1.4mV per LSB */
-        sensitivity = 0.5 / 1000;
+        sensitivity = 1.4 / 1000;
         break;
     }
 
