@@ -84,7 +84,7 @@ extern "C" {
 
 /* GPIO control registers */
 #define AXP192_GPIO0_CONTROL            (0x90)
-#define AXP192_GPIO0_LDO0_VOLTAGE       (0x91)
+#define AXP192_GPIO0_LDOIO0_VOLTAGE     (0x91)
 #define AXP192_GPIO1_CONTROL            (0x92)
 #define AXP192_GPIO2_CONTROL            (0x93)
 #define AXP192_GPIO20_SIGNAL_STATUS     (0x94)
