@@ -127,24 +127,24 @@ extern "C" {
 #define AXP192_CHARGE_CURRENT           (0x7a)
 #define AXP192_DISCHARGE_CURRENT        (0x7c)
 #define AXP192_APS_VOLTAGE              (0x7e)
-#define AXP192_CHARGE_COULOMB_1         (0xb0)
-#define AXP192_CHARGE_COULOMB_2         (0xb1)
-#define AXP192_CHARGE_COULOMB_3         (0xb2)
-#define AXP192_CHARGE_COULOMB_4         (0xb3)
-#define AXP192_DISCHARGE_COULOMB_1      (0xb4)
-#define AXP192_DISCHARGE_COULOMB_2      (0xb5)
-#define AXP192_DISCHARGE_COULOMB_3      (0xb6)
-#define AXP192_DISCHARGE_COULOMB_4      (0xb7)
+#define AXP192_CHARGE_COULOMB           (0xb0)
+#define AXP192_DISCHARGE_COULOMB        (0xb4)
 #define AXP192_COULOMB_COUNTER_CONTROL  (0xb8)
 
+/* Computed ADC */
+#define AXP192_COULOMB_COUNTER          (0xff)
 
 /* IOCTL commands */
-#define	AXP192_IOCTL_WRITE         (0x00)
-#define	AXP192_IOCTL_READ          (0x01)
+#define	AXP192_IOCTL_WRITE              (0x00)
+#define	AXP192_IOCTL_READ               (0x01)
 
-#define	AXP192_READ_POWER_STATUS   ((AXP192_POWER_STATUS << 1) | AXP192_IOCTL_READ)
-#define	AXP192_READ_CHARGE_STATUS  ((AXP192_CHARGE_STATUS << 1) | AXP192_IOCTL_READ)
+#define	AXP192_READ_POWER_STATUS        ((AXP192_POWER_STATUS << 8) | AXP192_IOCTL_READ)
+#define	AXP192_READ_CHARGE_STATUS       ((AXP192_CHARGE_STATUS << 8) | AXP192_IOCTL_READ)
 
+#define AXP192_COULOMB_COUNTER_ENABLE   (0xb801)
+#define AXP192_COULOMB_COUNTER_DISABLE  (0xb802)
+#define AXP192_COULOMB_COUNTER_SUSPEND  (0xb803)
+#define AXP192_COULOMB_COUNTER_CLEAR    (0xb804)
 
 typedef struct {
     uint8_t command;

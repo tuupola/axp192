@@ -19,7 +19,7 @@ $ make menuconfig
 #include "axp192.h"
 #include "your-i2c-hal.h"
 
-float vacin, iacin, vvbus, ivbus, temp, pbat, vbat, icharge, idischarge, vaps;
+float vacin, iacin, vvbus, ivbus, temp, pbat, vbat, icharge, idischarge, vaps, cbat;
 uint8_t power, charge;
 
 axp192_init(i2c_read, i2c_write);
@@ -45,8 +45,10 @@ printf(
 axp192_ioctl(AXP192_READ_POWER_STATUS, &power);
 axp192_ioctl(AXP192_READ_CHARGE_STATUS, &charge);
 
-printf(
-    "power: 0x%02x charge: 0x%02x",
-    power, charge
-);
+printf("power: 0x%02x charge: 0x%02x", power, charge);
+
+axp192_ioctl(AXP192_COULOMB_COUNTER_ENABLE, NULL);
+axp192_read(AXP192_COULOMB_COUNTER, &cbat);
+
+printf("cbat: %.2fmAh", cbat);
 ```

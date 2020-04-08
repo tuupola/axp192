@@ -35,6 +35,8 @@ static i2c_read_fn i2c_read;
 static i2c_write_fn i2c_write;
 static const uint8_t DELAY_BIT = 1 << 7;
 
+static void prv_read_coloumb_counter(float *buffer);
+
 static const axp192_init_command_t init_commands[] = {
     {AXP192_LDO23_VOLTAGE, {CONFIG_AXP192_LDO23_VOLTAGE}, 1},
     {AXP192_DCDC13_LDO23_CONTROL, {CONFIG_AXP192_DCDC13_LDO23_CONTROL}, 1},
@@ -120,6 +122,11 @@ void axp192_read(uint8_t reg, float *buffer)
         /* 1.4mV per LSB */
         sensitivity = 1.4 / 1000;
         break;
+    case AXP192_COULOMB_COUNTER:
+        /* This is currently untested. */
+        prv_read_coloumb_counter(buffer);
+        return;
+        break;
     }
 
     i2c_read(AXP192_ADDRESS, reg, tmp, 2);
@@ -128,12 +135,44 @@ void axp192_read(uint8_t reg, float *buffer)
 
 void axp192_ioctl(uint16_t command, uint8_t *buffer)
 {
-    uint8_t reg = command >> 1;
+    uint8_t reg = command >> 8;
+    uint8_t tmp;
 
     switch (command) {
     case AXP192_READ_POWER_STATUS:
     case AXP192_READ_CHARGE_STATUS:
         i2c_read(AXP192_ADDRESS, reg, buffer, 1);
         break;
+    case AXP192_COULOMB_COUNTER_ENABLE:
+        tmp = 0b10000000;
+        i2c_write(AXP192_ADDRESS, reg, &tmp, 1);
+        break;
+    case AXP192_COULOMB_COUNTER_DISABLE:
+        tmp = 0b00000000;
+        i2c_write(AXP192_ADDRESS, reg, &tmp, 1);
+        break;
+    case AXP192_COULOMB_COUNTER_SUSPEND:
+        tmp = 0b11000000;
+        i2c_write(AXP192_ADDRESS, reg, &tmp, 1);
+        break;
+    case AXP192_COULOMB_COUNTER_CLEAR:
+        tmp = 0b10100000;
+        i2c_write(AXP192_ADDRESS, reg, &tmp, 1);
+        break;
     }
+}
+
+static void prv_read_coloumb_counter(float *buffer)
+{
+    uint8_t tmp[4];
+    int32_t coin, coout;
+
+    i2c_read(AXP192_ADDRESS, AXP192_CHARGE_COULOMB, tmp, sizeof(coin));
+    coin = (tmp[0] << 24) + (tmp[1] << 16) + (tmp[2] << 8) + tmp[3];
+
+    i2c_read(AXP192_ADDRESS, AXP192_DISCHARGE_COULOMB, tmp, sizeof(coout));
+    coout = (tmp[0] << 24) + (tmp[1] << 16) + (tmp[2] << 8) + tmp[3];
+
+    /* CmAh = 65536 * 0.5mA *（coin - cout) / 3600 / ADC sample rate */
+    *buffer = 32768 * (coin - coout) / 3600 / 25;
 }
