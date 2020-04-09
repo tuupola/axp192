@@ -36,6 +36,7 @@ static i2c_write_fn i2c_write;
 static const uint8_t DELAY_BIT = 1 << 7;
 
 static axp192_err_t prv_read_coloumb_counter(float *buffer);
+static axp192_err_t prv_read_battery_power(float *buffer);
 
 static const axp192_init_command_t init_commands[] = {
     {AXP192_LDO23_VOLTAGE, {CONFIG_AXP192_LDO23_VOLTAGE}, 1},
@@ -107,13 +108,7 @@ axp192_err_t axp192_read(uint8_t reg, float *buffer)
         break;
     case AXP192_BATTERY_POWER:
         /* 1.1mV * 0.5mA per LSB */
-        sensitivity = 1.1 * 0.5 / 1000;
-        status = i2c_read(AXP192_ADDRESS, reg, tmp, 3);
-        if (AXP192_ERROR_OK != status) {
-            return status;
-        }
-        *buffer = (((tmp[0] << 16) + (tmp[1] << 8) + tmp[2]) * sensitivity) + offset;
-        return AXP192_ERROR_OK;
+        return prv_read_battery_power(buffer);
         break;
     case AXP192_BATTERY_VOLTAGE:
         /* 1.1mV per LSB */
@@ -186,7 +181,7 @@ static axp192_err_t prv_read_coloumb_counter(float *buffer)
     }
     coin = (tmp[0] << 24) + (tmp[1] << 16) + (tmp[2] << 8) + tmp[3];
 
-    i2c_read(AXP192_ADDRESS, AXP192_DISCHARGE_COULOMB, tmp, sizeof(coout));
+    status = i2c_read(AXP192_ADDRESS, AXP192_DISCHARGE_COULOMB, tmp, sizeof(coout));
     if (AXP192_ERROR_OK != status) {
         return status;
     }
@@ -195,5 +190,21 @@ static axp192_err_t prv_read_coloumb_counter(float *buffer)
     /* CmAh = 65536 * 0.5mA *（coin - cout) / 3600 / ADC sample rate */
     *buffer = 32768 * (coin - coout) / 3600 / 25;
 
+    return AXP192_ERROR_OK;
+}
+
+static axp192_err_t prv_read_battery_power(float *buffer)
+{
+    uint8_t tmp[4];
+    float sensitivity;
+    axp192_err_t status;
+
+    /* 1.1mV * 0.5mA per LSB */
+    sensitivity = 1.1 * 0.5 / 1000;
+    status = i2c_read(AXP192_ADDRESS, AXP192_BATTERY_POWER, tmp, 3);
+    if (AXP192_ERROR_OK != status) {
+        return status;
+    }
+    *buffer = (((tmp[0] << 16) + (tmp[1] << 8) + tmp[2]) * sensitivity);
     return AXP192_ERROR_OK;
 }
