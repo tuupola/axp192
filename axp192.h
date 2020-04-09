@@ -146,6 +146,10 @@ extern "C" {
 #define AXP192_COULOMB_COUNTER_SUSPEND  (0xb803)
 #define AXP192_COULOMB_COUNTER_CLEAR    (0xb804)
 
+/* Error codes */
+#define AXP192_ERROR_OK                 (0)
+#define AXP192_ERROR_NOTTY              (-1)
+
 typedef struct {
     uint8_t command;
     uint8_t data[2];
@@ -156,9 +160,11 @@ typedef struct {
 typedef int32_t (* i2c_read_fn)(uint8_t address, uint8_t reg, uint8_t *buffer, uint16_t size);
 typedef int32_t (* i2c_write_fn)(uint8_t address, uint8_t reg, const uint8_t *buffer, uint16_t size);
 
-void axp192_init(i2c_read_fn i2c_read_ptr, i2c_write_fn i2c_write_ptr);
-void axp192_read(uint8_t reg, float *buffer);
-void axp192_ioctl(uint16_t command, uint8_t *buffer);
+typedef int32_t axp192_err_t;
+
+axp192_err_t axp192_init(i2c_read_fn i2c_read_ptr, i2c_write_fn i2c_write_ptr);
+axp192_err_t axp192_read(uint8_t reg, float *buffer);
+axp192_err_t axp192_ioctl(uint16_t command, uint8_t *buffer);
 
 #ifdef __cplusplus
 }
