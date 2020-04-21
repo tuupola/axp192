@@ -31,8 +31,8 @@ SOFTWARE.
 #include "axp192.h"
 #include "axp192_config.h"
 
-static axp192_err_t prv_read_coloumb_counter(axp192_t *axp, float *buffer);
-static axp192_err_t prv_read_battery_power(axp192_t *axp, float *buffer);
+static axp192_err_t read_coloumb_counter(axp192_t *axp, float *buffer);
+static axp192_err_t read_battery_power(axp192_t *axp, float *buffer);
 
 static const axp192_init_command_t init_commands[] = {
     {AXP192_LDO23_VOLTAGE, {CONFIG_AXP192_LDO23_VOLTAGE}, 1},
@@ -96,7 +96,7 @@ axp192_err_t axp192_read(axp192_t *axp, uint8_t reg, float *buffer)
         break;
     case AXP192_BATTERY_POWER:
         /* 1.1mV * 0.5mA per LSB */
-        return prv_read_battery_power(axp, buffer);
+        return read_battery_power(axp, buffer);
         break;
     case AXP192_BATTERY_VOLTAGE:
         /* 1.1mV per LSB */
@@ -113,7 +113,7 @@ axp192_err_t axp192_read(axp192_t *axp, uint8_t reg, float *buffer)
         break;
     case AXP192_COULOMB_COUNTER:
         /* This is currently untested. */
-        return prv_read_coloumb_counter(axp, buffer);
+        return read_coloumb_counter(axp, buffer);
         break;
     }
 
@@ -157,7 +157,7 @@ axp192_err_t axp192_ioctl(axp192_t *axp, uint16_t command, uint8_t *buffer)
     return AXP192_ERROR_NOTTY;
 }
 
-static axp192_err_t prv_read_coloumb_counter(axp192_t *axp, float *buffer)
+static axp192_err_t read_coloumb_counter(axp192_t *axp, float *buffer)
 {
     uint8_t tmp[4];
     int32_t coin, coout;
@@ -181,7 +181,7 @@ static axp192_err_t prv_read_coloumb_counter(axp192_t *axp, float *buffer)
     return AXP192_ERROR_OK;
 }
 
-static axp192_err_t prv_read_battery_power(axp192_t *axp, float *buffer)
+static axp192_err_t read_battery_power(axp192_t *axp, float *buffer)
 {
     uint8_t tmp[4];
     float sensitivity;
