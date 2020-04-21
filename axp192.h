@@ -1,7 +1,5 @@
 /*
 
-SPDX-License-Identifier: MIT
-
 MIT License
 
 Copyright (c) 2019-2020 Mika Tuupola
@@ -23,6 +21,13 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+-cut-
+
+This file is part of hardware agnostic I2C driver for AXP192:
+https://github.com/tuupola/axp192
+
+SPDX-License-Identifier: MIT
 
 */
 
