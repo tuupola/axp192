@@ -31,12 +31,10 @@ SOFTWARE.
 #include "axp192.h"
 #include "axp192_config.h"
 
-static i2c_read_fn i2c_read_function;
-static i2c_write_fn i2c_write_function;
 static const uint8_t DELAY_BIT = 1 << 7;
 
-static axp192_err_t prv_read_coloumb_counter(float *buffer);
-static axp192_err_t prv_read_battery_power(float *buffer);
+static axp192_err_t prv_read_coloumb_counter(axp192_t *axp, float *buffer);
+static axp192_err_t prv_read_battery_power(axp192_t *axp, float *buffer);
 
 static const axp192_init_command_t init_commands[] = {
     {AXP192_LDO23_VOLTAGE, {CONFIG_AXP192_LDO23_VOLTAGE}, 1},
@@ -46,21 +44,17 @@ static const axp192_init_command_t init_commands[] = {
     {AXP192_EXTEN_DCDC2_CONTROL, {CONFIG_AXP192_EXTEN_DCDC2_CONTROL}, 1},
     {AXP192_ADC_ENABLE_1, {CONFIG_AXP192_ADC_ENABLE_1}, 1},
     {AXP192_CHARGE_CONTROL_1, {CONFIG_AXP192_CHARGE_CONTROL_1}, 1},
-    /* End of commands . */
+    /* End of commands. */
     {0, {0}, 0xff},
 };
 
-axp192_err_t axp192_init(i2c_read_fn i2c_read_ptr, i2c_write_fn i2c_write_ptr)
+axp192_err_t axp192_init(axp192_t *axp)
 {
     uint8_t cmd = 0;
 
-    /* Assign pointers to the glue functions. */
-    i2c_read_function = i2c_read_ptr;
-    i2c_write_function = i2c_write_ptr;
-
     /* Send all the commands. */
     while (init_commands[cmd].count != 0xff) {
-        i2c_write_function(
+        axp->write(
             AXP192_ADDRESS,
             init_commands[cmd].command,
             init_commands[cmd].data,
@@ -76,7 +70,7 @@ axp192_err_t axp192_init(i2c_read_fn i2c_read_ptr, i2c_write_fn i2c_write_ptr)
     return AXP192_ERROR_OK;
 }
 
-axp192_err_t axp192_read(uint8_t reg, float *buffer)
+axp192_err_t axp192_read(axp192_t *axp, uint8_t reg, float *buffer)
 {
     uint8_t tmp[4];
     float sensitivity = 1.0;
@@ -108,7 +102,7 @@ axp192_err_t axp192_read(uint8_t reg, float *buffer)
         break;
     case AXP192_BATTERY_POWER:
         /* 1.1mV * 0.5mA per LSB */
-        return prv_read_battery_power(buffer);
+        return prv_read_battery_power(axp, buffer);
         break;
     case AXP192_BATTERY_VOLTAGE:
         /* 1.1mV per LSB */
@@ -125,11 +119,11 @@ axp192_err_t axp192_read(uint8_t reg, float *buffer)
         break;
     case AXP192_COULOMB_COUNTER:
         /* This is currently untested. */
-        return prv_read_coloumb_counter(buffer);
+        return prv_read_coloumb_counter(axp, buffer);
         break;
     }
 
-    status = i2c_read_function(AXP192_ADDRESS, reg, tmp, 2);
+    status = axp->read(AXP192_ADDRESS, reg, tmp, 2);
     if (AXP192_ERROR_OK != status) {
         return status;
     }
@@ -138,7 +132,7 @@ axp192_err_t axp192_read(uint8_t reg, float *buffer)
     return AXP192_ERROR_OK;
 }
 
-axp192_err_t axp192_ioctl(uint16_t command, uint8_t *buffer)
+axp192_err_t axp192_ioctl(axp192_t *axp, uint16_t command, uint8_t *buffer)
 {
     uint8_t reg = command >> 8;
     uint8_t tmp;
@@ -146,42 +140,42 @@ axp192_err_t axp192_ioctl(uint16_t command, uint8_t *buffer)
     switch (command) {
     case AXP192_READ_POWER_STATUS:
     case AXP192_READ_CHARGE_STATUS:
-        return i2c_read_function(AXP192_ADDRESS, reg, buffer, 1);
+        return axp->read(AXP192_ADDRESS, reg, buffer, 1);
         break;
     case AXP192_COULOMB_COUNTER_ENABLE:
         tmp = 0b10000000;
-        return i2c_write_function(AXP192_ADDRESS, reg, &tmp, 1);
+        return axp->write(AXP192_ADDRESS, reg, &tmp, 1);
         break;
     case AXP192_COULOMB_COUNTER_DISABLE:
         tmp = 0b00000000;
-        return i2c_write_function(AXP192_ADDRESS, reg, &tmp, 1);
+        return axp->write(AXP192_ADDRESS, reg, &tmp, 1);
         break;
     case AXP192_COULOMB_COUNTER_SUSPEND:
         tmp = 0b11000000;
-        return i2c_write_function(AXP192_ADDRESS, reg, &tmp, 1);
+        return axp->write(AXP192_ADDRESS, reg, &tmp, 1);
         break;
     case AXP192_COULOMB_COUNTER_CLEAR:
         tmp = 0b10100000;
-        return i2c_write_function(AXP192_ADDRESS, reg, &tmp, 1);
+        return axp->write(AXP192_ADDRESS, reg, &tmp, 1);
         break;
     }
 
     return AXP192_ERROR_NOTTY;
 }
 
-static axp192_err_t prv_read_coloumb_counter(float *buffer)
+static axp192_err_t prv_read_coloumb_counter(axp192_t *axp, float *buffer)
 {
     uint8_t tmp[4];
     int32_t coin, coout;
     axp192_err_t status;
 
-    status = i2c_read_function(AXP192_ADDRESS, AXP192_CHARGE_COULOMB, tmp, sizeof(coin));
+    status = axp->read(AXP192_ADDRESS, AXP192_CHARGE_COULOMB, tmp, sizeof(coin));
     if (AXP192_ERROR_OK != status) {
         return status;
     }
     coin = (tmp[0] << 24) + (tmp[1] << 16) + (tmp[2] << 8) + tmp[3];
 
-    status = i2c_read_function(AXP192_ADDRESS, AXP192_DISCHARGE_COULOMB, tmp, sizeof(coout));
+    status = axp->read(AXP192_ADDRESS, AXP192_DISCHARGE_COULOMB, tmp, sizeof(coout));
     if (AXP192_ERROR_OK != status) {
         return status;
     }
@@ -193,7 +187,7 @@ static axp192_err_t prv_read_coloumb_counter(float *buffer)
     return AXP192_ERROR_OK;
 }
 
-static axp192_err_t prv_read_battery_power(float *buffer)
+static axp192_err_t prv_read_battery_power(axp192_t *axp, float *buffer)
 {
     uint8_t tmp[4];
     float sensitivity;
@@ -201,7 +195,7 @@ static axp192_err_t prv_read_battery_power(float *buffer)
 
     /* 1.1mV * 0.5mA per LSB */
     sensitivity = 1.1 * 0.5 / 1000;
-    status = i2c_read_function(AXP192_ADDRESS, AXP192_BATTERY_POWER, tmp, 3);
+    status = axp->read(AXP192_ADDRESS, AXP192_BATTERY_POWER, tmp, 3);
     if (AXP192_ERROR_OK != status) {
         return status;
     }

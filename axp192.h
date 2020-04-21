@@ -154,14 +154,16 @@ typedef struct {
 } axp192_init_command_t;
 
 /* These should be provided by the HAL. */
-typedef int32_t (* i2c_read_fn)(uint8_t address, uint8_t reg, uint8_t *buffer, uint16_t size);
-typedef int32_t (* i2c_write_fn)(uint8_t address, uint8_t reg, const uint8_t *buffer, uint16_t size);
+typedef struct {
+    int32_t (* read)(uint8_t address, uint8_t reg, uint8_t *buffer, uint16_t size);
+    int32_t (* write)(uint8_t address, uint8_t reg, const uint8_t *buffer, uint16_t size);
+} axp192_t;
 
 typedef int32_t axp192_err_t;
 
-axp192_err_t axp192_init(i2c_read_fn i2c_read_ptr, i2c_write_fn i2c_write_ptr);
-axp192_err_t axp192_read(uint8_t reg, float *buffer);
-axp192_err_t axp192_ioctl(uint16_t command, uint8_t *buffer);
+axp192_err_t axp192_init(axp192_t *axp);
+axp192_err_t axp192_read(axp192_t *axp, uint8_t reg, float *buffer);
+axp192_err_t axp192_ioctl(axp192_t *axp, uint16_t command, uint8_t *buffer);
 
 #ifdef __cplusplus
 }
