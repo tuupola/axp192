@@ -31,8 +31,6 @@ SOFTWARE.
 #include "axp192.h"
 #include "axp192_config.h"
 
-static const uint8_t DELAY_BIT = 1 << 7;
-
 static axp192_err_t prv_read_coloumb_counter(axp192_t *axp, float *buffer);
 static axp192_err_t prv_read_battery_power(axp192_t *axp, float *buffer);
 
@@ -60,10 +58,6 @@ axp192_err_t axp192_init(axp192_t *axp)
             init_commands[cmd].data,
             init_commands[cmd].count & 0x1f
         );
-        if (init_commands[cmd].count & DELAY_BIT) {
-            // TODO: delay
-            //vTaskDelay(200 / portTICK_RATE_MS);
-        }
         cmd++;
     }
 
