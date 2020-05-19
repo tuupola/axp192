@@ -160,8 +160,9 @@ typedef struct {
 
 /* These should be provided by the HAL. */
 typedef struct {
-    int32_t (* read)(uint8_t address, uint8_t reg, uint8_t *buffer, uint16_t size);
-    int32_t (* write)(uint8_t address, uint8_t reg, const uint8_t *buffer, uint16_t size);
+    int32_t (* read)(void *handle, uint8_t address, uint8_t reg, uint8_t *buffer, uint16_t size);
+    int32_t (* write)(void *handle, uint8_t address, uint8_t reg, const uint8_t *buffer, uint16_t size);
+    void *handle;
 } axp192_t;
 
 typedef int32_t axp192_err_t;

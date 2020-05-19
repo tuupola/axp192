@@ -33,8 +33,8 @@ SPDX-License-Identifier: MIT
 
 #include <stdint.h>
 
-#include "axp192.h"
 #include "axp192_config.h"
+#include "axp192.h"
 
 static axp192_err_t read_coloumb_counter(axp192_t *axp, float *buffer);
 static axp192_err_t read_battery_power(axp192_t *axp, float *buffer);
@@ -58,6 +58,7 @@ axp192_err_t axp192_init(axp192_t *axp)
     /* Send all the commands. */
     while (init_commands[cmd].count != 0xff) {
         axp->write(
+            axp->handle,
             AXP192_ADDRESS,
             init_commands[cmd].command,
             init_commands[cmd].data,
@@ -122,7 +123,7 @@ axp192_err_t axp192_read(axp192_t *axp, uint8_t reg, float *buffer)
         break;
     }
 
-    status = axp->read(AXP192_ADDRESS, reg, tmp, 2);
+    status = axp->read(axp->handle, AXP192_ADDRESS, reg, tmp, 2);
     if (AXP192_ERROR_OK != status) {
         return status;
     }
@@ -139,23 +140,23 @@ axp192_err_t axp192_ioctl(axp192_t *axp, uint16_t command, uint8_t *buffer)
     switch (command) {
     case AXP192_READ_POWER_STATUS:
     case AXP192_READ_CHARGE_STATUS:
-        return axp->read(AXP192_ADDRESS, reg, buffer, 1);
+        return axp->read(axp->handle, AXP192_ADDRESS, reg, buffer, 1);
         break;
     case AXP192_COULOMB_COUNTER_ENABLE:
         tmp = 0b10000000;
-        return axp->write(AXP192_ADDRESS, reg, &tmp, 1);
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
     case AXP192_COULOMB_COUNTER_DISABLE:
         tmp = 0b00000000;
-        return axp->write(AXP192_ADDRESS, reg, &tmp, 1);
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
     case AXP192_COULOMB_COUNTER_SUSPEND:
         tmp = 0b11000000;
-        return axp->write(AXP192_ADDRESS, reg, &tmp, 1);
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
     case AXP192_COULOMB_COUNTER_CLEAR:
         tmp = 0b10100000;
-        return axp->write(AXP192_ADDRESS, reg, &tmp, 1);
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
     }
 
@@ -168,13 +169,13 @@ static axp192_err_t read_coloumb_counter(axp192_t *axp, float *buffer)
     int32_t coin, coout;
     axp192_err_t status;
 
-    status = axp->read(AXP192_ADDRESS, AXP192_CHARGE_COULOMB, tmp, sizeof(coin));
+    status = axp->read(axp->handle, AXP192_ADDRESS, AXP192_CHARGE_COULOMB, tmp, sizeof(coin));
     if (AXP192_ERROR_OK != status) {
         return status;
     }
     coin = (tmp[0] << 24) + (tmp[1] << 16) + (tmp[2] << 8) + tmp[3];
 
-    status = axp->read(AXP192_ADDRESS, AXP192_DISCHARGE_COULOMB, tmp, sizeof(coout));
+    status = axp->read(axp->handle, AXP192_ADDRESS, AXP192_DISCHARGE_COULOMB, tmp, sizeof(coout));
     if (AXP192_ERROR_OK != status) {
         return status;
     }
@@ -194,7 +195,7 @@ static axp192_err_t read_battery_power(axp192_t *axp, float *buffer)
 
     /* 1.1mV * 0.5mA per LSB */
     sensitivity = 1.1 * 0.5 / 1000;
-    status = axp->read(AXP192_ADDRESS, AXP192_BATTERY_POWER, tmp, 3);
+    status = axp->read(axp->handle, AXP192_ADDRESS, AXP192_BATTERY_POWER, tmp, 3);
     if (AXP192_ERROR_OK != status) {
         return status;
     }
