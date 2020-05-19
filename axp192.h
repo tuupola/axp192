@@ -167,9 +167,9 @@ typedef struct {
 
 typedef int32_t axp192_err_t;
 
-axp192_err_t axp192_init(axp192_t *axp);
-axp192_err_t axp192_read(axp192_t *axp, uint8_t reg, float *buffer);
-axp192_err_t axp192_ioctl(axp192_t *axp, uint16_t command, uint8_t *buffer);
+axp192_err_t axp192_init(const axp192_t *axp);
+axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, float *buffer);
+axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer);
 
 #ifdef __cplusplus
 }
