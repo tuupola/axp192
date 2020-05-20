@@ -54,16 +54,20 @@ static const axp192_init_command_t init_commands[] = {
 axp192_err_t axp192_init(const axp192_t *axp)
 {
     uint8_t cmd = 0;
+    axp192_err_t status;
 
     /* Send all the commands. */
     while (init_commands[cmd].count != 0xff) {
-        axp->write(
+        status = axp->write(
             axp->handle,
             AXP192_ADDRESS,
             init_commands[cmd].command,
             init_commands[cmd].data,
             init_commands[cmd].count & 0x1f
         );
+        if (AXP192_OK != status) {
+            return status;
+        }
         cmd++;
     }
 
