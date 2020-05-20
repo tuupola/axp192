@@ -67,7 +67,7 @@ axp192_err_t axp192_init(const axp192_t *axp)
         cmd++;
     }
 
-    return AXP192_ERROR_OK;
+    return AXP192_OK;
 }
 
 axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, float *buffer)
@@ -124,12 +124,12 @@ axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, float *buffer)
     }
 
     status = axp->read(axp->handle, AXP192_ADDRESS, reg, tmp, 2);
-    if (AXP192_ERROR_OK != status) {
+    if (AXP192_OK != status) {
         return status;
     }
     *buffer = (((tmp[0] << 4) + tmp[1]) * sensitivity) + offset;
 
-    return AXP192_ERROR_OK;
+    return AXP192_OK;
 }
 
 axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer)
@@ -170,13 +170,13 @@ static axp192_err_t read_coloumb_counter(const axp192_t *axp, float *buffer)
     axp192_err_t status;
 
     status = axp->read(axp->handle, AXP192_ADDRESS, AXP192_CHARGE_COULOMB, tmp, sizeof(coin));
-    if (AXP192_ERROR_OK != status) {
+    if (AXP192_OK != status) {
         return status;
     }
     coin = (tmp[0] << 24) + (tmp[1] << 16) + (tmp[2] << 8) + tmp[3];
 
     status = axp->read(axp->handle, AXP192_ADDRESS, AXP192_DISCHARGE_COULOMB, tmp, sizeof(coout));
-    if (AXP192_ERROR_OK != status) {
+    if (AXP192_OK != status) {
         return status;
     }
     coout = (tmp[0] << 24) + (tmp[1] << 16) + (tmp[2] << 8) + tmp[3];
@@ -184,7 +184,7 @@ static axp192_err_t read_coloumb_counter(const axp192_t *axp, float *buffer)
     /* CmAh = 65536 * 0.5mA *（coin - cout) / 3600 / ADC sample rate */
     *buffer = 32768 * (coin - coout) / 3600 / 25;
 
-    return AXP192_ERROR_OK;
+    return AXP192_OK;
 }
 
 static axp192_err_t read_battery_power(const axp192_t *axp, float *buffer)
@@ -196,9 +196,9 @@ static axp192_err_t read_battery_power(const axp192_t *axp, float *buffer)
     /* 1.1mV * 0.5mA per LSB */
     sensitivity = 1.1 * 0.5 / 1000;
     status = axp->read(axp->handle, AXP192_ADDRESS, AXP192_BATTERY_POWER, tmp, 3);
-    if (AXP192_ERROR_OK != status) {
+    if (AXP192_OK != status) {
         return status;
     }
     *buffer = (((tmp[0] << 16) + (tmp[1] << 8) + tmp[2]) * sensitivity);
-    return AXP192_ERROR_OK;
+    return AXP192_OK;
 }

@@ -149,7 +149,7 @@ extern "C" {
 #define AXP192_COULOMB_COUNTER_CLEAR    (0xb804)
 
 /* Error codes */
-#define AXP192_ERROR_OK                 (0)
+#define AXP192_OK                       (0)
 #define AXP192_ERROR_NOTTY              (-1)
 
 typedef struct {
