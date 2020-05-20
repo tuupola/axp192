@@ -68,7 +68,7 @@ menu "Output voltage"
 
         choice AXP192_GPIO0_LDOIO0_VOLTAGE_BIT74
             prompt "LDOIO0 output voltage"
-            default AXP192_GPIO0_LDOIO0_VOLTAGE_BIT74_1V8
+            default AXP192_GPIO0_LDOIO0_VOLTAGE_BIT74_3V0
             config AXP192_GPIO0_LDOIO0_VOLTAGE_BIT74_1V8
                 bool "1.8V"
             config AXP192_GPIO0_LDOIO0_VOLTAGE_BIT74_1V9
@@ -128,7 +128,7 @@ menu "Output voltage"
 
     choice AXP192_LDO23_VOLTAGE_BIT74
         prompt "LDO2 output voltage"
-        default AXP192_LDO23_VOLTAGE_BIT74_1V8
+        default AXP192_LDO23_VOLTAGE_BIT74_3V0
         config AXP192_LDO23_VOLTAGE_BIT74_1V8
             bool "1.8V"
         config AXP192_LDO23_VOLTAGE_BIT74_1V9
@@ -186,7 +186,7 @@ menu "Output voltage"
 
     choice AXP192_LDO23_VOLTAGE_BIT30
         prompt "LDO3 output voltage"
-        default AXP192_LDO23_VOLTAGE_BIT30_1V8
+        default AXP192_LDO23_VOLTAGE_BIT30_3V0
         config AXP192_LDO23_VOLTAGE_BIT30_1V8
             bool "1.8V"
         config AXP192_LDO23_VOLTAGE_BIT30_1V9
