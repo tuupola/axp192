@@ -1,6 +1,6 @@
-# Hardware agnostic I2C driver for AXP192 PMU
+# Platform agnostic I2C driver for AXP192 PMU
 
-To use this library you must to provide HAL functions for both reading and writing the I2C bus. Function definitions must be the following.
+To use this library you must to provide functions for both reading and writing the I2C bus. Function definitions must be the following.
 
 ```c
 int32_t i2c_read(void *handle, uint8_t address, uint8_t reg, uint8_t *buffer, uint16_t size);
@@ -17,15 +17,15 @@ $ make menuconfig
 
 ```c
 #include "axp192.h"
-#include "your-i2c-hal.h"
+#include "user_i2c.h"
 
 float vacin, iacin, vvbus, ivbus, temp, pbat, vbat, icharge, idischarge, vaps, cbat;
 uint8_t power, charge;
 axp192_t axp;
 
 /* Add pointers to HAL functions. */
-axp.read = &i2c_read;
-axp.write = &i2c_write;
+axp.read = &user_i2c_read;
+axp.write = &user_i2c_write;
 
 /* You could set the handle here. It can be pointer to anything. */
 axp.handle = NULL;
