@@ -135,7 +135,6 @@ menu "Output voltage"
             default 0xd0 if AXP192_GPIO0_LDOIO0_VOLTAGE_BIT74_3V1
             default 0xe0 if AXP192_GPIO0_LDOIO0_VOLTAGE_BIT74_3V2
             default 0xf0 if AXP192_GPIO0_LDOIO0_VOLTAGE_BIT74_3V3
-            default 0x00
     endif
 
     choice AXP192_LDO23_VOLTAGE_BIT74
