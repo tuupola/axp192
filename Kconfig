@@ -64,6 +64,18 @@ config AXP192_DCDC13_LDO23_CONTROL_BIT0
 
 menu "Output voltage"
 
+    config AXP192_GPIO0_LDOIO0_VOLTAGE_BIT74
+        hex
+        default 0x00 if !AXP192_GPIO0_CONTROL_LDOIO0_SELECTED
+
+    config AXP192_LDO23_VOLTAGE_BIT74
+        hex
+        default 0x00 if !AXP192_GPIO0_CONTROL_LDOIO0_SELECTED
+
+    config AXP192_LDO23_VOLTAGE_BIT30
+        hex
+        default 0x00 if !AXP192_GPIO0_CONTROL_LDOIO0_SELECTED
+
     if AXP192_GPIO0_CONTROL_LDOIO0_SELECTED
 
         choice AXP192_GPIO0_LDOIO0_VOLTAGE_BIT74
@@ -123,7 +135,7 @@ menu "Output voltage"
             default 0xd0 if AXP192_GPIO0_LDOIO0_VOLTAGE_BIT74_3V1
             default 0xe0 if AXP192_GPIO0_LDOIO0_VOLTAGE_BIT74_3V2
             default 0xf0 if AXP192_GPIO0_LDOIO0_VOLTAGE_BIT74_3V3
-
+            default 0x00
     endif
 
     choice AXP192_LDO23_VOLTAGE_BIT74
@@ -312,6 +324,18 @@ menu "Charge control"
             hex
             default 0x00 if !AXP192_CHARGE_CONTROL_1_BIT7_SELECTED
             default 0x80 if AXP192_CHARGE_CONTROL_1_BIT7_SELECTED
+
+        config AXP192_CHARGE_CONTROL_1_BIT65
+            hex
+            default 0x00 if !AXP192_CHARGE_CONTROL_1_BIT7_SELECTED
+
+        config AXP192_CHARGE_CONTROL_1_BIT30
+            hex
+            default 0x00 if !AXP192_CHARGE_CONTROL_1_BIT7_SELECTED
+
+        config AXP192_CHARGE_CONTROL_1_BIT4
+            hex
+            default 0x00 if !AXP192_CHARGE_CONTROL_1_BIT7_SELECTED
 
         if AXP192_CHARGE_CONTROL_1_BIT7_SELECTED
 
