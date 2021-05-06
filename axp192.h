@@ -189,6 +189,10 @@ axp192_err_t axp192_set_rail_millivolts(const axp192_t *axp, axp192_rail_t rail,
 axp192_err_t axp192_read_reg(const axp192_t *axp, uint8_t reg, uint8_t *val);
 axp192_err_t axp192_write_reg(const axp192_t *axp, uint8_t reg, uint8_t val);
 
+axp192_err_t axp192_read_irq_mask(const axp192_t *axp, uint8_t mask[5]);
+axp192_err_t axp192_write_irq_mask(const axp192_t *axp, uint8_t mask[5]);
+axp192_err_t axp192_read_irq_status(const axp192_t *axp, const uint8_t mask[5], uint8_t status[5], bool clear);
+
 axp192_err_t axp192_init(const axp192_t *axp);
 axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, float *buffer);
 axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer);

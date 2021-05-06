@@ -280,6 +280,90 @@ axp192_err_t axp192_write_reg(axp192_t *axp, uint8_t reg, uint8_t val)
 {
     return axp->write(axp->handle, AXP192_ADDRESS, reg, &val, 1);
 }
+
+axp192_err_t axp192_read_irq_mask(const axp192_t *axp, uint8_t mask[5])
+{
+    static const uint8_t regs[] = {
+        AXP192_ENABLE_CONTROL_1,
+        AXP192_ENABLE_CONTROL_2,
+        AXP192_ENABLE_CONTROL_3,
+        AXP192_ENABLE_CONTROL_4,
+        AXP192_ENABLE_CONTROL_5,
+    };
+
+    axp192_err_t ret;
+    int i;
+    for (i = 0; i < 5; i++) {
+        if (mask[i] != 0) {
+            ret = axp192_read_reg(axp, regs[i], &mask[i]);
+            if (ret != AXP192_ERROR_OK) {
+                return ret;
+            }
+        }
+    }
+
+    return AXP192_ERROR_OK;
+}
+
+axp192_err_t axp192_write_irq_mask(const axp192_t *axp, uint8_t mask[5])
+{
+    static const uint8_t regs[] = {
+        AXP192_ENABLE_CONTROL_1,
+        AXP192_ENABLE_CONTROL_2,
+        AXP192_ENABLE_CONTROL_3,
+        AXP192_ENABLE_CONTROL_4,
+        AXP192_ENABLE_CONTROL_5,
+    };
+
+    axp192_err_t ret;
+    int i;
+    for (i = 0; i < 5; i++) {
+        ret = axp192_write_reg(axp, regs[i], mask[i]);
+        if (ret != AXP192_ERROR_OK) {
+            return ret;
+        }
+    }
+
+    return AXP192_ERROR_OK;
+}
+
+axp192_err_t axp192_read_irq_status(const axp192_t *axp, const uint8_t mask[5], uint8_t status[5], bool clear)
+{
+    static const uint8_t regs[] = {
+        AXP192_IRQ_STATUS_1,
+        AXP192_IRQ_STATUS_2,
+        AXP192_IRQ_STATUS_3,
+        AXP192_IRQ_STATUS_4,
+        AXP192_IRQ_STATUS_5,
+    };
+
+    axp192_err_t ret;
+    int i;
+    for (i = 0; i < 5; i++) {
+        status[i] = 0;
+
+        if (mask[i] == 0) {
+            continue;
+        }
+
+        ret = axp192_read_reg(axp, regs[i], &status[i]);
+        if (ret != AXP192_ERROR_OK) {
+            return ret;
+        }
+
+        status[i] &= mask[i];
+
+        if (clear && status[i]) {
+            ret = axp192_write_reg(axp, regs[i], status[i]);
+            if (ret != AXP192_ERROR_OK) {
+                return ret;
+            }
+        }
+    }
+
+    return AXP192_ERROR_OK;
+}
+
 axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, float *buffer)
 {
     uint8_t tmp[4];
