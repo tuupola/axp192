@@ -210,6 +210,17 @@ axp192_err_t axp192_set_rail_state(axp192_t *axp, axp192_rail_t rail, bool enabl
     return AXP192_ERROR_OK;
 }
 
+axp192_err_t axp192_bits(const axp192_t *axp, uint8_t reg, uint8_t bits_off, uint8_t bits_on) {
+    uint8_t val;
+    axp192_err_t ret = axp192_read_reg(axp, reg, &val);
+    if (ret != AXP192_ERROR_OK) {
+      return ret;
+    }
+    val &= ~bits_off;
+    val |= bits_on;
+    return axp192_write_reg(axp, reg, val);
+}
+
 axp192_err_t axp192_get_rail_millivolts(axp192_t *axp, axp192_rail_t rail, uint16_t *millivolts)
 {
     axp192_err_t status;
