@@ -149,7 +149,7 @@ extern "C" {
 #define AXP192_COULOMB_COUNTER_CLEAR    (0xb804)
 
 /* Error codes */
-#define AXP192_ERROR_OK                 (0)
+#define AXP192_OK                       (0)
 #define AXP192_ERROR_NOTTY              (-1)
 
 typedef struct {
@@ -160,15 +160,16 @@ typedef struct {
 
 /* These should be provided by the HAL. */
 typedef struct {
-    int32_t (* read)(uint8_t address, uint8_t reg, uint8_t *buffer, uint16_t size);
-    int32_t (* write)(uint8_t address, uint8_t reg, const uint8_t *buffer, uint16_t size);
+    int32_t (* read)(void *handle, uint8_t address, uint8_t reg, uint8_t *buffer, uint16_t size);
+    int32_t (* write)(void *handle, uint8_t address, uint8_t reg, const uint8_t *buffer, uint16_t size);
+    void *handle;
 } axp192_t;
 
 typedef int32_t axp192_err_t;
 
-axp192_err_t axp192_init(axp192_t *axp);
-axp192_err_t axp192_read(axp192_t *axp, uint8_t reg, float *buffer);
-axp192_err_t axp192_ioctl(axp192_t *axp, uint16_t command, uint8_t *buffer);
+axp192_err_t axp192_init(const axp192_t *axp);
+axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, float *buffer);
+axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer);
 
 #ifdef __cplusplus
 }
