@@ -74,6 +74,307 @@ axp192_err_t axp192_init(const axp192_t *axp)
     return AXP192_OK;
 }
 
+typedef struct {
+    uint16_t min_millivolts;
+    uint16_t max_millivolts;
+    uint16_t step_millivolts;
+    uint8_t voltage_reg;
+    uint8_t voltage_lsb;
+    uint8_t voltage_mask;
+} axp192_rail_cfg_t;
+
+const axp192_rail_cfg_t axp192_rail_configs[] = {
+    [AXP192_RAIL_DCDC1] = {
+        .min_millivolts = 700,
+        .max_millivolts = 3500,
+        .step_millivolts = 25,
+        .voltage_reg = AXP192_DCDC1_VOLTAGE,
+        .voltage_lsb = 0,
+        .voltage_mask = (1 << 7) - 1,
+    },
+    [AXP192_RAIL_DCDC2] = {
+        .min_millivolts = 700,
+        .max_millivolts = 2275,
+        .step_millivolts = 25,
+        .voltage_reg = AXP192_DCDC2_VOLTAGE,
+        .voltage_lsb = 0,
+        .voltage_mask = (1 << 6) - 1,
+    },
+    [AXP192_RAIL_DCDC3] = {
+        .min_millivolts = 700,
+        .max_millivolts = 3500,
+        .step_millivolts = 25,
+        .voltage_reg = AXP192_DCDC3_VOLTAGE,
+        .voltage_lsb = 0,
+        .voltage_mask = (1 << 7) - 1,
+    },
+    [AXP192_RAIL_LDO2] = {
+        .min_millivolts = 1800,
+        .max_millivolts = 3300,
+        .step_millivolts = 100,
+        .voltage_reg = AXP192_LDO23_VOLTAGE,
+        .voltage_lsb = 4,
+        .voltage_mask = 0xf0,
+    },
+    [AXP192_RAIL_LDO3] = {
+        .min_millivolts = 1800,
+        .max_millivolts = 3300,
+        .step_millivolts = 100,
+        .voltage_reg = AXP192_LDO23_VOLTAGE,
+        .voltage_lsb = 0,
+        .voltage_mask = 0x0f,
+    },
+};
+
+axp192_err_t axp192_get_rail_state(const axp192_t *axp, axp192_rail_t rail, bool *enabled)
+{
+    axp192_err_t status;
+    uint8_t val;
+
+    status = axp192_read_reg(axp, AXP192_DCDC13_LDO23_CONTROL, &val);
+    if (status != AXP192_OK) {
+        return status;
+    }
+
+    switch (rail) {
+        case AXP192_RAIL_DCDC1:
+            *enabled = !!(val & (1 << 0));
+            break;
+        case AXP192_RAIL_DCDC2:
+            *enabled = !!(val & (1 << 4));
+            break;
+        case AXP192_RAIL_DCDC3:
+            *enabled = !!(val & (1 << 1));
+            break;
+        case AXP192_RAIL_LDO2:
+            *enabled = !!(val & (1 << 2));
+            break;
+        case AXP192_RAIL_LDO3:
+            *enabled = !!(val & (1 << 3));
+            break;
+        case AXP192_RAIL_EXTEN:
+            *enabled = !!(val & (1 << 6));
+            break;
+        default:
+            return AXP192_ERROR_EINVAL;
+    }
+
+    return AXP192_OK;
+}
+
+axp192_err_t axp192_set_rail_state(const axp192_t *axp, axp192_rail_t rail, bool enabled)
+{
+    axp192_err_t status;
+    uint8_t val;
+    uint8_t mask;
+
+    status = axp192_read_reg(axp, AXP192_DCDC13_LDO23_CONTROL, &val);
+    if (status != AXP192_OK) {
+        return status;
+    }
+
+    switch (rail) {
+        case AXP192_RAIL_DCDC1:
+            mask = (1 << 0);
+            break;
+        case AXP192_RAIL_DCDC2:
+            mask = (1 << 4);
+            break;
+        case AXP192_RAIL_DCDC3:
+            mask = (1 << 1);
+            break;
+        case AXP192_RAIL_LDO2:
+            mask = (1 << 2);
+            break;
+        case AXP192_RAIL_LDO3:
+            mask = (1 << 3);
+            break;
+        case AXP192_RAIL_EXTEN:
+            mask = (1 << 6);
+            break;
+        default:
+            return AXP192_ERROR_EINVAL;
+    }
+
+    if (enabled) {
+        val |= mask;
+    } else {
+        val = val & ~mask;
+    }
+
+    status = axp192_write_reg(axp, AXP192_DCDC13_LDO23_CONTROL, val);
+    if (status != AXP192_OK) {
+        return status;
+    }
+
+    return AXP192_OK;
+}
+
+axp192_err_t axp192_bits(const axp192_t *axp, uint8_t reg, uint8_t bits_off, uint8_t bits_on) {
+    uint8_t val;
+    axp192_err_t ret = axp192_read_reg(axp, reg, &val);
+    if (ret != AXP192_OK) {
+      return ret;
+    }
+    val &= ~bits_off;
+    val |= bits_on;
+    return axp192_write_reg(axp, reg, val);
+}
+
+axp192_err_t axp192_get_rail_millivolts(const axp192_t *axp, axp192_rail_t rail, uint16_t *millivolts)
+{
+    axp192_err_t status;
+    uint8_t val;
+
+    if ((rail < AXP192_RAIL_DCDC1) || (rail >= AXP192_RAIL_COUNT)) {
+        return AXP192_ERROR_EINVAL;
+    }
+
+    const axp192_rail_cfg_t *cfg = &axp192_rail_configs[rail];
+    if (cfg->step_millivolts == 0) {
+        return AXP192_ERROR_EINVAL;
+    }
+
+    status = axp192_read_reg(axp, cfg->voltage_reg, &val);
+    if (status != AXP192_OK) {
+        return status;
+    }
+
+    val = (val & cfg->voltage_mask) >> cfg->voltage_lsb;
+
+    *millivolts = cfg->min_millivolts + cfg->step_millivolts * val;
+
+    return AXP192_OK;
+}
+
+axp192_err_t axp192_set_rail_millivolts(const axp192_t *axp, axp192_rail_t rail, uint16_t millivolts)
+{
+
+    axp192_err_t status;
+    uint8_t val, steps;
+
+    if ((rail < AXP192_RAIL_DCDC1) || (rail >= AXP192_RAIL_COUNT)) {
+        return AXP192_ERROR_EINVAL;
+    }
+
+    const axp192_rail_cfg_t *cfg = &axp192_rail_configs[rail];
+    if (cfg->step_millivolts == 0) {
+        return AXP192_ERROR_EINVAL;
+    }
+
+    if ((millivolts < cfg->min_millivolts) || (millivolts > cfg->max_millivolts)) {
+        return AXP192_ERROR_EINVAL;
+    }
+
+    status = axp192_read_reg(axp, cfg->voltage_reg, &val);
+    if (status != AXP192_OK) {
+        return status;
+    }
+
+    steps = (millivolts - cfg->min_millivolts) / cfg->step_millivolts;
+    val = (val & ~(cfg->voltage_mask)) | (steps << cfg->voltage_lsb);
+
+    status = axp192_write_reg(axp, cfg->voltage_reg, val);
+    if (status != AXP192_OK) {
+        return status;
+    }
+
+    return AXP192_OK;
+}
+
+axp192_err_t axp192_read_reg(const axp192_t *axp, uint8_t reg, uint8_t *val)
+{
+    return axp->read(axp->handle, AXP192_ADDRESS, reg, val, 1);
+}
+
+axp192_err_t axp192_write_reg(const axp192_t *axp, uint8_t reg, uint8_t val)
+{
+    return axp->write(axp->handle, AXP192_ADDRESS, reg, &val, 1);
+}
+
+axp192_err_t axp192_read_irq_mask(const axp192_t *axp, uint8_t mask[5])
+{
+    static const uint8_t regs[] = {
+        AXP192_ENABLE_CONTROL_1,
+        AXP192_ENABLE_CONTROL_2,
+        AXP192_ENABLE_CONTROL_3,
+        AXP192_ENABLE_CONTROL_4,
+        AXP192_ENABLE_CONTROL_5,
+    };
+
+    axp192_err_t ret;
+    int i;
+    for (i = 0; i < 5; i++) {
+        if (mask[i] != 0) {
+            ret = axp192_read_reg(axp, regs[i], &mask[i]);
+            if (ret != AXP192_OK) {
+                return ret;
+            }
+        }
+    }
+
+    return AXP192_OK;
+}
+
+axp192_err_t axp192_write_irq_mask(const axp192_t *axp, uint8_t mask[5])
+{
+    static const uint8_t regs[] = {
+        AXP192_ENABLE_CONTROL_1,
+        AXP192_ENABLE_CONTROL_2,
+        AXP192_ENABLE_CONTROL_3,
+        AXP192_ENABLE_CONTROL_4,
+        AXP192_ENABLE_CONTROL_5,
+    };
+
+    axp192_err_t ret;
+    int i;
+    for (i = 0; i < 5; i++) {
+        ret = axp192_write_reg(axp, regs[i], mask[i]);
+        if (ret != AXP192_OK) {
+            return ret;
+        }
+    }
+
+    return AXP192_OK;
+}
+
+axp192_err_t axp192_read_irq_status(const axp192_t *axp, const uint8_t mask[5], uint8_t status[5], bool clear)
+{
+    static const uint8_t regs[] = {
+        AXP192_IRQ_STATUS_1,
+        AXP192_IRQ_STATUS_2,
+        AXP192_IRQ_STATUS_3,
+        AXP192_IRQ_STATUS_4,
+        AXP192_IRQ_STATUS_5,
+    };
+
+    axp192_err_t ret;
+    int i;
+    for (i = 0; i < 5; i++) {
+        status[i] = 0;
+
+        if (mask[i] == 0) {
+            continue;
+        }
+
+        ret = axp192_read_reg(axp, regs[i], &status[i]);
+        if (ret != AXP192_OK) {
+            return ret;
+        }
+
+        status[i] &= mask[i];
+
+        if (clear && status[i]) {
+            ret = axp192_write_reg(axp, regs[i], status[i]);
+            if (ret != AXP192_OK) {
+                return ret;
+            }
+        }
+    }
+
+    return AXP192_OK;
+}
+
 axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, float *buffer)
 {
     uint8_t tmp[4];
