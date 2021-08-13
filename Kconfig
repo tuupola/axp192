@@ -317,7 +317,7 @@ config AXP192_ADC_ENABLE_1_BIT0
 
 menu "Charge control"
     config AXP192_CHARGE_CONTROL_1_BIT7_SELECTED
-        bool "Enable charging"
+        bool "Enable main battery charging"
 
         config AXP192_CHARGE_CONTROL_1_BIT7
             hex
@@ -434,6 +434,64 @@ menu "Charge control"
                 default 0x10 if AXP192_CHARGE_CONTROL_1_BIT4_15_SELECTED
 
         endif
-    endmenu
 
+    config AXP192_BATTERY_CHARGE_CONTROL_BIT7_SELECTED
+        bool "Enable backup battery charging"
+
+        config AXP192_BATTERY_CHARGE_CONTROL_BIT7
+            hex
+            default 0x00 if !AXP192_BATTERY_CHARGE_CONTROL_BIT7_SELECTED
+            default 0x80 if AXP192_BATTERY_CHARGE_CONTROL_BIT7_SELECTED
+
+        config AXP192_BATTERY_CHARGE_CONTROL_BIT65
+            hex
+            default 0x00 if !AXP192_BATTERY_CHARGE_CONTROL_BIT7_SELECTED
+
+        config AXP192_BATTERY_CHARGE_CONTROL_BIT10
+            hex
+            default 0x00 if !AXP192_BATTERY_CHARGE_CONTROL_BIT7_SELECTED
+
+        if AXP192_BATTERY_CHARGE_CONTROL_BIT7_SELECTED
+
+            choice AXP192_BATTERY_CHARGE_CONTROL_BIT65
+                prompt "Charge target voltage"
+                default AXP192_BATTERY_CHARGE_CONTROL_BIT65_30_SELECTED
+                config AXP192_BATTERY_CHARGE_CONTROL_BIT65_25_SELECTED
+                    bool "2.5V"
+                config AXP192_BATTERY_CHARGE_CONTROL_BIT65_30_SELECTED
+                    bool "3.0V"
+                config AXP192_BATTERY_CHARGE_CONTROL_BIT65_31_SELECTED
+                    bool "3.1V"
+                config AXP192_BATTERY_CHARGE_CONTROL_BIT65_36_SELECTED
+                    bool "3.6V"
+            endchoice
+
+            config AXP192_BATTERY_CHARGE_CONTROL_BIT65
+                hex
+                default 0x00 if AXP192_BATTERY_CHARGE_CONTROL_BIT65_31_SELECTED
+                default 0x20 if AXP192_BATTERY_CHARGE_CONTROL_BIT65_30_SELECTED
+                default 0x40 if AXP192_BATTERY_CHARGE_CONTROL_BIT65_36_SELECTED
+                default 0x60 if AXP192_BATTERY_CHARGE_CONTROL_BIT65_25_SELECTED
+
+            choice AXP192_BATTERY_CHARGE_CONTROL_BIT10
+                prompt "Charge current"
+                default AXP192_BATTERY_CHARGE_CONTROL_BIT10_50_SELECTED
+                config AXP192_BATTERY_CHARGE_CONTROL_BIT10_50_SELECTED
+                    bool "50uA"
+                config AXP192_BATTERY_CHARGE_CONTROL_BIT10_100_SELECTED
+                    bool "100uA"
+                config AXP192_BATTERY_CHARGE_CONTROL_BIT10_200_SELECTED
+                    bool "200uA"
+                config AXP192_BATTERY_CHARGE_CONTROL_BIT10_400_SELECTED
+                    bool "400mA"
+            endchoice
+
+            config AXP192_BATTERY_CHARGE_CONTROL_BIT10
+                hex
+                default 0x00 if AXP192_BATTERY_CHARGE_CONTROL_BIT10_50_SELECTED
+                default 0x01 if AXP192_BATTERY_CHARGE_CONTROL_BIT10_100_SELECTED
+                default 0x02 if AXP192_BATTERY_CHARGE_CONTROL_BIT10_200_SELECTED
+                default 0x03 if AXP192_BATTERY_CHARGE_CONTROL_BIT10_400_SELECTED
+        endif
+    endmenu
 endmenu
