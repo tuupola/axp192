@@ -54,7 +54,7 @@ extern "C" {
 #define AXP192_DATA_BUFFER5             (0x0b)
 /* Output control: 2 EXTEN, 0 DCDC2 */
 #define AXP192_EXTEN_DCDC2_CONTROL      (0x10)
-/* Power output control: 6 EXTEN, 4 DCDC2, 3 LDO3, 2 LDO2, 1 DCDC3, 0 DCDC1 */
+/* Power output control: 3 LDO3, 2 LDO2, 1 DCDC3, 0 DCDC1 */
 #define AXP192_DCDC13_LDO23_CONTROL     (0x12)
 #define AXP192_DCDC2_VOLTAGE            (0x23)
 #define AXP192_DCDC2_SLOPE              (0x25)

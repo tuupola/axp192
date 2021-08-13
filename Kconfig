@@ -76,6 +76,10 @@ menu "Output voltage"
         hex
         default 0x00 if !AXP192_GPIO0_CONTROL_LDOIO0_SELECTED
 
+    config AXP192_DCDC1_VOLTAGE_BIT60
+        hex
+        default 0x00 if !AXP192_DCDC13_LDO23_CONTROL_BIT0_SELECTED
+
     if AXP192_GPIO0_CONTROL_LDOIO0_SELECTED
 
         choice AXP192_GPIO0_LDOIO0_VOLTAGE_BIT74
@@ -252,6 +256,106 @@ menu "Output voltage"
         default 0x0d if AXP192_LDO23_VOLTAGE_BIT30_3V1
         default 0x0e if AXP192_LDO23_VOLTAGE_BIT30_3V2
         default 0x0f if AXP192_LDO23_VOLTAGE_BIT30_3V3
+
+    if AXP192_DCDC13_LDO23_CONTROL_BIT0_SELECTED
+
+        choice AXP192_DCDC1_VOLTAGE_BIT60
+            prompt "DC-DC1 output voltage"
+            default AXP192_DCDC1_VOLTAGE_BIT60_3V0
+
+            config AXP192_DCDC1_VOLTAGE_BIT60_0V7
+                bool "0.7V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_0V8
+                bool "0.8V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_0V9
+                bool "0.9V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_1V0
+                bool "1.0V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_1V1
+                bool "1.1V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_1V2
+                bool "1.2V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_1V3
+                bool "1.3V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_1V4
+                bool "1.4V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_1V5
+                bool "1.5V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_1V6
+                bool "1.6V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_1V7
+                bool "1.7V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_1V8
+                bool "1.8"
+            config AXP192_DCDC1_VOLTAGE_BIT60_1V9
+                bool "1.9V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_2V0
+                bool "2.0V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_2V1
+                bool "2.1V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_2V2
+                bool "2.2V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_2V3
+                bool "2.3V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_2V4
+                bool "2.4V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_2V5
+                bool "2.5V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_2V6
+                bool "2.6V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_2V7
+                bool "2.7V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_2V8
+                bool "2.8V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_2V9
+                bool "2.9V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_3V0
+                bool "3.0V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_3V1
+                bool "3.1V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_3V2
+                bool "3.2V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_3V3
+                bool "3.3V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_3V4
+                bool "3.4V"
+            config AXP192_DCDC1_VOLTAGE_BIT60_3V5
+                bool "3.5V"
+        endchoice
+
+        config AXP192_DCDC1_VOLTAGE_BIT60
+            hex
+            default 0x00 if AXP192_DCDC1_VOLTAGE_BIT60_0V7
+            default 0x04 if AXP192_DCDC1_VOLTAGE_BIT60_0V8
+            default 0x08 if AXP192_DCDC1_VOLTAGE_BIT60_0V9
+            default 0x0c if AXP192_DCDC1_VOLTAGE_BIT60_1V0
+            default 0x10 if AXP192_DCDC1_VOLTAGE_BIT60_1V1
+            default 0x14 if AXP192_DCDC1_VOLTAGE_BIT60_1V2
+            default 0x18 if AXP192_DCDC1_VOLTAGE_BIT60_1V3
+            default 0x1c if AXP192_DCDC1_VOLTAGE_BIT60_1V4
+            default 0x20 if AXP192_DCDC1_VOLTAGE_BIT60_1V5
+            default 0x24 if AXP192_DCDC1_VOLTAGE_BIT60_1V6
+            default 0x28 if AXP192_DCDC1_VOLTAGE_BIT60_1V7
+            default 0x2c if AXP192_DCDC1_VOLTAGE_BIT60_1V8
+            default 0x30 if AXP192_DCDC1_VOLTAGE_BIT60_1V9
+            default 0x34 if AXP192_DCDC1_VOLTAGE_BIT60_2V0
+            default 0x38 if AXP192_DCDC1_VOLTAGE_BIT60_2V1
+            default 0x3c if AXP192_DCDC1_VOLTAGE_BIT60_2V2
+            default 0x40 if AXP192_DCDC1_VOLTAGE_BIT60_2V3
+            default 0x44 if AXP192_DCDC1_VOLTAGE_BIT60_2V4
+            default 0x48 if AXP192_DCDC1_VOLTAGE_BIT60_2V5
+            default 0x4c if AXP192_DCDC1_VOLTAGE_BIT60_2V6
+            default 0x50 if AXP192_DCDC1_VOLTAGE_BIT60_2V7
+            default 0x54 if AXP192_DCDC1_VOLTAGE_BIT60_2V8
+            default 0x58 if AXP192_DCDC1_VOLTAGE_BIT60_2V9
+            default 0x5c if AXP192_DCDC1_VOLTAGE_BIT60_3V0
+            default 0x60 if AXP192_DCDC1_VOLTAGE_BIT60_3V1
+            default 0x64 if AXP192_DCDC1_VOLTAGE_BIT60_3V2
+            default 0x68 if AXP192_DCDC1_VOLTAGE_BIT60_3V3
+            default 0x6c if AXP192_DCDC1_VOLTAGE_BIT60_3V4
+            default 0x70 if AXP192_DCDC1_VOLTAGE_BIT60_3V5
+    endif
+
 
 endmenu
 
