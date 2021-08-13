@@ -14,7 +14,7 @@ menu "Output control"
     config AXP192_DCDC13_LDO23_CONTROL_BIT1_SELECTED
         bool "Enable DC-DC3"
     config AXP192_DCDC13_LDO23_CONTROL_BIT0_SELECTED
-        bool "Enable DC-DC0"
+        bool "Enable DC-DC1"
 endmenu
 
 config AXP192_EXTEN_DCDC2_CONTROL_BIT2
