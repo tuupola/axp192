@@ -148,6 +148,9 @@ extern "C" {
 #define AXP192_COULOMB_COUNTER_SUSPEND  (0xb803)
 #define AXP192_COULOMB_COUNTER_CLEAR    (0xb804)
 
+#define AXP192_LDO3_ENABLE              (0x1201)
+#define AXP192_LDO3_DISABLE             (0x1202)
+
 /* Error codes */
 #define AXP192_OK                       (0)
 #define AXP192_ERROR_NOTTY              (-1)
