@@ -40,19 +40,19 @@ static axp192_err_t read_coloumb_counter(const axp192_t *axp, float *buffer);
 static axp192_err_t read_battery_power(const axp192_t *axp, float *buffer);
 
 static const axp192_init_command_t init_commands[] = {
+    {AXP192_DCDC1_VOLTAGE, {CONFIG_AXP192_DCDC1_VOLTAGE}, 1},
+    {AXP192_DCDC3_VOLTAGE, {CONFIG_AXP192_DCDC3_VOLTAGE}, 1},
     {AXP192_LDO23_VOLTAGE, {CONFIG_AXP192_LDO23_VOLTAGE}, 1},
-    {AXP192_DCDC13_LDO23_CONTROL, {CONFIG_AXP192_DCDC13_LDO23_CONTROL}, 1},
     {AXP192_GPIO0_LDOIO0_VOLTAGE, {CONFIG_AXP192_GPIO0_LDOIO0_VOLTAGE}, 1},
+    {AXP192_DCDC13_LDO23_CONTROL, {CONFIG_AXP192_DCDC13_LDO23_CONTROL}, 1},
+    {AXP192_EXTEN_DCDC2_CONTROL, {CONFIG_AXP192_EXTEN_DCDC2_CONTROL}, 1},
     {AXP192_GPIO0_CONTROL, {CONFIG_AXP192_GPIO0_CONTROL}, 1},
     {AXP192_GPIO1_CONTROL, {CONFIG_AXP192_GPIO1_CONTROL}, 1},
     {AXP192_GPIO2_CONTROL, {CONFIG_AXP192_GPIO2_CONTROL}, 1},
     {AXP192_GPIO43_FUNCTION_CONTROL, {CONFIG_AXP192_GPIO43_FUNCTION_CONTROL}, 1},
-    {AXP192_EXTEN_DCDC2_CONTROL, {CONFIG_AXP192_EXTEN_DCDC2_CONTROL}, 1},
     {AXP192_ADC_ENABLE_1, {CONFIG_AXP192_ADC_ENABLE_1}, 1},
     {AXP192_CHARGE_CONTROL_1, {CONFIG_AXP192_CHARGE_CONTROL_1}, 1},
     {AXP192_BATTERY_CHARGE_CONTROL, {CONFIG_AXP192_BATTERY_CHARGE_CONTROL}, 1},
-    {AXP192_DCDC1_VOLTAGE, {CONFIG_AXP192_DCDC1_VOLTAGE}, 1},
-    {AXP192_DCDC3_VOLTAGE, {CONFIG_AXP192_DCDC3_VOLTAGE}, 1},
     /* End of commands. */
     {0, {0}, 0xff},
 };
@@ -166,6 +166,16 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer
         break;
     case AXP192_COULOMB_COUNTER_CLEAR:
         tmp = 0b10100000;
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        break;
+    case AXP192_LDO3_ENABLE:
+        axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        tmp |= 0b00001000;
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        break;
+    case AXP192_LDO3_DISABLE:
+        axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        tmp &= ~0b00001000;
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
     }
