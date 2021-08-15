@@ -151,6 +151,11 @@ extern "C" {
 #define AXP192_LDO3_ENABLE              (0x1201)
 #define AXP192_LDO3_DISABLE             (0x1202)
 
+#define AXP192_GPIO_LOW                 (&(uint8_t){0})
+#define AXP192_GPIO_HIGH                (&(uint8_t){1})
+
+#define AXP192_GPIO1_SET_LEVEL          (0x9401)
+
 /* Error codes */
 #define AXP192_OK                       (0)
 #define AXP192_ERROR_NOTTY              (-1)
