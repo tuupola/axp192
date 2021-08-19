@@ -148,11 +148,13 @@ extern "C" {
 #define AXP192_COULOMB_COUNTER_SUSPEND  (0xb803)
 #define AXP192_COULOMB_COUNTER_CLEAR    (0xb804)
 
-#define AXP192_LDO3_ENABLE              (0x1201)
-#define AXP192_LDO3_DISABLE             (0x1202)
+#define AXP192_DISABLE                  (&(uint8_t){0})
+#define AXP192_ENABLE                   (&(uint8_t){1})
 
-#define AXP192_GPIO_LOW                 (&(uint8_t){0})
-#define AXP192_GPIO_HIGH                (&(uint8_t){1})
+#define AXP192_LDO3_SET_CONTROL         (0x1201)
+
+#define AXP192_LOW                      (&(uint8_t){0})
+#define AXP192_HIGH                     (&(uint8_t){1})
 
 #define AXP192_GPIO1_SET_LEVEL          (0x9401)
 #define AXP192_GPIO4_SET_LEVEL          (0x9601)
