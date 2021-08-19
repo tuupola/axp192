@@ -155,6 +155,7 @@ extern "C" {
 #define AXP192_GPIO_HIGH                (&(uint8_t){1})
 
 #define AXP192_GPIO1_SET_LEVEL          (0x9401)
+#define AXP192_GPIO4_SET_LEVEL          (0x9601)
 
 /* Error codes */
 #define AXP192_OK                       (0)
