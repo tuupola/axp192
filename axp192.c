@@ -168,14 +168,13 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer
         tmp = 0b10100000;
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
-    case AXP192_LDO3_ENABLE:
+    case AXP192_LDO3_SET_CONTROL:
         axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
-        tmp |= 0b00001000;
-        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
-        break;
-    case AXP192_LDO3_DISABLE:
-        axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
-        tmp &= ~0b00001000;
+        if (*buffer) {
+            tmp |= 0b00001000;
+        } else {
+            tmp &= ~0b00001000;
+        }
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
     case AXP192_GPIO1_SET_LEVEL:

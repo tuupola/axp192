@@ -59,4 +59,15 @@ axp192_ioctl(&axp, AXP192_COULOMB_COUNTER_ENABLE, NULL);
 axp192_read(&axp, AXP192_COULOMB_COUNTER, &cbat);
 
 printf("cbat: %.2fmAh", cbat);
+
+/* Misc ioctl functions. */
+
+axp192_ioctl(&axp, AXP192_LDO3_SET_CONTROL, AXP192_DISABLE);
+axp192_ioctl(&axp, AXP192_LDO3_SET_CONTROL, AXP192_ENABLE);
+
+axp192_ioctl(&axp, AXP192_GPIO4_SET_LEVEL, AXP192_HIGH);
+axp192_ioctl(&axp, AXP192_GPIO4_SET_LEVEL, AXP192_LOW);
+
+axp192_ioctl(&axp, AXP192_GPIO1_SET_LEVEL, AXP192_HIGH);
+axp192_ioctl(&axp, AXP192_GPIO1_SET_LEVEL, AXP192_LOW);
 ```
