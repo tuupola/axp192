@@ -35,6 +35,7 @@ SPDX-License-Identifier: MIT
 
 #include "axp192_config.h"
 #include "axp192.h"
+#include "esp_bit_defs.h"
 
 static axp192_err_t read_coloumb_counter(const axp192_t *axp, float *buffer);
 static axp192_err_t read_battery_power(const axp192_t *axp, float *buffer);
@@ -174,6 +175,15 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer
             tmp |= 0b00001000;
         } else {
             tmp &= ~0b00001000;
+        }
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        break;
+    case AXP192_DCDC3_SET_CONTROL:
+        axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        if (*buffer) {
+            tmp |= 0b00000010;
+        } else {
+            tmp &= ~0b00000010;
         }
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
