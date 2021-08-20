@@ -168,6 +168,15 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer
         tmp = 0b10100000;
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
+    case AXP192_LDO2_SET_CONTROL:
+        axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        if (*buffer) {
+            tmp |= 0b00000100;
+        } else {
+            tmp &= ~0b00000100;
+        }
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        break;
     case AXP192_LDO3_SET_CONTROL:
         axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         if (*buffer) {
