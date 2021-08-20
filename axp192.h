@@ -151,6 +151,7 @@ extern "C" {
 #define AXP192_DISABLE                  (&(uint8_t){0})
 #define AXP192_ENABLE                   (&(uint8_t){1})
 
+#define AXP192_LDO2_SET_CONTROL         (0x1200)
 #define AXP192_LDO3_SET_CONTROL         (0x1201)
 #define AXP192_DCDC3_SET_CONTROL        (0x1202)
 
