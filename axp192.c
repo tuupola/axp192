@@ -35,7 +35,6 @@ SPDX-License-Identifier: MIT
 
 #include "axp192_config.h"
 #include "axp192.h"
-#include "esp_bit_defs.h"
 
 static axp192_err_t read_coloumb_counter(const axp192_t *axp, float *buffer);
 static axp192_err_t read_battery_power(const axp192_t *axp, float *buffer);
