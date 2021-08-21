@@ -207,6 +207,15 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer
         }
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
+    case AXP192_GPIO0_SET_LEVEL:
+        axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        if (*buffer) {
+            tmp |= 0b00000001;
+        } else {
+            tmp &= ~0b00000001;
+        }
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        break;
     }
 
     return AXP192_ERROR_NOTTY;
