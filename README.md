@@ -63,7 +63,8 @@ axp192_read(&axp, AXP192_COULOMB_COUNTER, &cbat);
 
 printf("cbat: %.2fmAh", cbat);
 
-/* Misc ioctl functions. */
+/* Shortcuts for common tasks which otherwise would require */
+/* multiple steps or function calls. */
 axp192_ioctl(&axp, AXP192_LDO2_ENABLE);
 axp192_ioctl(&axp, AXP192_LDO2_DISABLE);
 
