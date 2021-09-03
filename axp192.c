@@ -167,7 +167,7 @@ axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, void *buffer) {
     }
 }
 
-axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, ...)
+axp192_err_t axp192_ioctl(const axp192_t *axp, int command, ...)
 {
     uint8_t reg = command >> 8;
     uint8_t tmp, argument;
