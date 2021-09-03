@@ -32,6 +32,7 @@ axp.handle = NULL;
 
 axp192_init(&axp);
 
+/* All ADC registers will be read a floats. */
 axp192_read(&axp, AXP192_ACIN_VOLTAGE, &vacin);
 axp192_read(&axp, AXP192_ACIN_CURRENT, &iacin);
 axp192_read(&axp, AXP192_VBUS_VOLTAGE, &vvbus);
@@ -50,6 +51,8 @@ printf(
     vacin, iacin, vvbus, ivbus, vts, temp, pbat, vbat, icharge, idischarge, vaps
 );
 
+/* All non ADC registers will be read as a raw bytes. */
+/* See axp192.h or datasheet for all possible registers. */
 axp192_ioctl(&axp, AXP192_READ_POWER_STATUS, &power);
 axp192_ioctl(&axp, AXP192_READ_CHARGE_STATUS, &charge);
 

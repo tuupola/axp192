@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## [0.5.0](https://github.com/tuupola/axp192/compare/0.4.0...0.5.0) - 2021-09-21
+## [0.6.0-dev](https://github.com/tuupola/axp192/compare/0.5.0...master) - unreleased
+
+### Added
+
+- Add support for reading raw register values ([#24](https://github.com/tuupola/axp192/issues/24))
+
+## [0.5.0](https://github.com/tuupola/axp192/compare/0.4.0...0.5.0) - 2021-09-03
 
 This version adds features needed for using with M5STack Core2.
 
