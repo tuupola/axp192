@@ -8,6 +8,20 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Add support for reading raw register values ([#24](https://github.com/tuupola/axp192/issues/24))
 
+### Removed
+
+- All moot ioctl commands ([#25](https://github.com/tuupola/axp192/issues/25)).
+    ```c
+    axp192_ioctl(&axp, AXP192_READ_POWER_STATUS, &power);
+    axp192_ioctl(&axp, AXP192_READ_CHARGE_STATUS, &charge);
+    ```
+    All registers can now be read using the `axp192_read()` function instead.
+
+    ```c
+    axp192_read(&axp, AXP192_POWER_STATUS, &power);
+    axp192_read(&axp, AXP192_CHARGE_STATUS, &charge);
+    ```
+
 ## [0.5.0](https://github.com/tuupola/axp192/compare/0.4.0...0.5.0) - 2021-09-03
 
 This version adds features needed for using with M5STack Core2.
