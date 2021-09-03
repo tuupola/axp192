@@ -172,10 +172,6 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer
     uint8_t tmp;
 
     switch (command) {
-    case AXP192_READ_POWER_STATUS:
-    case AXP192_READ_CHARGE_STATUS:
-        return axp->read(axp->handle, AXP192_ADDRESS, reg, buffer, 1);
-        break;
     case AXP192_COULOMB_COUNTER_ENABLE:
         tmp = 0b10000000;
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
