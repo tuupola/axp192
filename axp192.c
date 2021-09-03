@@ -190,7 +190,16 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, ...)
         tmp = 0b10100000;
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
-    case AXP192_LDO2_SET_CONTROL:
+    case AXP192_LDO2_ENABLE:
+        axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        tmp |= 0b00000100;
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        break;
+    case AXP192_LDO2_DISABLE:
+        axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        tmp &= ~0b00000100;
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        break;
     /* This is currently untested. */
     case AXP192_GPIO2_SET_LEVEL:
         axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
@@ -198,10 +207,8 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, ...)
         argument = (uint8_t) va_arg(ap, int);
         va_end(ap);
         if (argument) {
-            printf("argument %d ie set\n", argument);
             tmp |= 0b00000100;
         } else {
-            printf("argument %d ie unset\n", argument);
             tmp &= ~0b00000100;
         }
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
