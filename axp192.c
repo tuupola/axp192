@@ -81,7 +81,7 @@ axp192_err_t axp192_init(const axp192_t *axp)
     return AXP192_OK;
 }
 
-axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, float *buffer)
+static axp192_err_t axp192_read_adc(const axp192_t *axp, uint8_t reg, float *buffer)
 {
     uint8_t tmp[4];
     float sensitivity = 1.0;
@@ -141,6 +141,29 @@ axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, float *buffer)
     *buffer = (((tmp[0] << 4) + tmp[1]) * sensitivity) + offset;
 
     return AXP192_OK;
+}
+
+axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, void *buffer) {
+    switch (reg) {
+    case AXP192_ACIN_VOLTAGE:
+    case AXP192_VBUS_VOLTAGE:
+    case AXP192_ACIN_CURRENT:
+    case AXP192_VBUS_CURRENT:
+    case AXP192_TEMP:
+    case AXP192_TS_INPUT:
+    case AXP192_BATTERY_POWER:
+    case AXP192_BATTERY_VOLTAGE:
+    case AXP192_CHARGE_CURRENT:
+    case AXP192_DISCHARGE_CURRENT:
+    case AXP192_APS_VOLTAGE:
+    case AXP192_COULOMB_COUNTER:
+        /* Return ADC value. */
+        return axp192_read_adc(axp, reg, buffer);
+        break;
+    default:
+        /* Return raw register value. */
+        return axp->read(axp->handle, AXP192_ADDRESS, reg, buffer, 1);
+    }
 }
 
 axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer)
