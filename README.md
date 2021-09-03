@@ -53,8 +53,8 @@ printf(
 
 /* All non ADC registers will be read as a raw bytes. */
 /* See axp192.h or datasheet for all possible registers. */
-axp192_ioctl(&axp, AXP192_READ_POWER_STATUS, &power);
-axp192_ioctl(&axp, AXP192_READ_CHARGE_STATUS, &charge);
+axp192_read(&axp, AXP192_POWER_STATUS, &power);
+axp192_read(&axp, AXP192_CHARGE_STATUS, &charge);
 
 printf("power: 0x%02x charge: 0x%02x", power, charge);
 
