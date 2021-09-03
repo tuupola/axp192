@@ -32,6 +32,7 @@ Version: 0.5.0
 
 */
 
+#include <stdarg.h>
 #include <stdint.h>
 
 #include "axp192_config.h"
@@ -166,10 +167,11 @@ axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, void *buffer) {
     }
 }
 
-axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer)
+axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, ...)
 {
     uint8_t reg = command >> 8;
-    uint8_t tmp;
+    uint8_t tmp, argument;
+    va_list ap;
 
     switch (command) {
     case AXP192_COULOMB_COUNTER_ENABLE:
@@ -192,16 +194,24 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer
     /* This is currently untested. */
     case AXP192_GPIO2_SET_LEVEL:
         axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
-        if (*buffer) {
+        va_start(ap, command);
+        argument = (uint8_t) va_arg(ap, int);
+        va_end(ap);
+        if (argument) {
+            printf("argument %d ie set\n", argument);
             tmp |= 0b00000100;
         } else {
+            printf("argument %d ie unset\n", argument);
             tmp &= ~0b00000100;
         }
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
     case AXP192_LDO3_SET_CONTROL:
         axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
-        if (*buffer) {
+        va_start(ap, command);
+        argument = (uint8_t) va_arg(ap, int);
+        va_end(ap);
+        if (argument) {
             tmp |= 0b00001000;
         } else {
             tmp &= ~0b00001000;
@@ -210,7 +220,10 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer
         break;
     case AXP192_DCDC3_SET_CONTROL:
         axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
-        if (*buffer) {
+        va_start(ap, command);
+        argument = (uint8_t) va_arg(ap, int);
+        va_end(ap);
+        if (argument) {
             tmp |= 0b00000010;
         } else {
             tmp &= ~0b00000010;
@@ -220,7 +233,10 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer
     case AXP192_GPIO1_SET_LEVEL:
     case AXP192_GPIO4_SET_LEVEL:
         axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
-        if (*buffer) {
+        va_start(ap, command);
+        argument = (uint8_t) va_arg(ap, int);
+        va_end(ap);
+        if (argument) {
             tmp |= 0b00000010;
         } else {
             tmp &= ~0b00000010;
@@ -230,7 +246,10 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer
     /* This is currently untested. */
     case AXP192_GPIO0_SET_LEVEL:
         axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
-        if (*buffer) {
+        va_start(ap, command);
+        argument = (uint8_t) va_arg(ap, int);
+        va_end(ap);
+        if (argument) {
             tmp |= 0b00000001;
         } else {
             tmp &= ~0b00000001;

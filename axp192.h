@@ -149,8 +149,8 @@ extern "C" {
 #define AXP192_COULOMB_COUNTER_SUSPEND  (0xb803)
 #define AXP192_COULOMB_COUNTER_CLEAR    (0xb804)
 
-#define AXP192_DISABLE                  (&(uint8_t){0})
-#define AXP192_ENABLE                   (&(uint8_t){1})
+#define AXP192_DISABLE                  (0)
+#define AXP192_ENABLE                   (1)
 
 #define AXP192_LDO2_SET_CONTROL         (0x1200)
 #define AXP192_LDO3_SET_CONTROL         (0x1201)
@@ -185,7 +185,7 @@ typedef int32_t axp192_err_t;
 
 axp192_err_t axp192_init(const axp192_t *axp);
 axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, void *buffer);
-axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer);
+axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, ...);
 
 #ifdef __cplusplus
 }
