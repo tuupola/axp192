@@ -32,7 +32,7 @@ axp.handle = NULL;
 
 axp192_init(&axp);
 
-/* All ADC registers will be read a floats. */
+/* All ADC registers will be read as floats. */
 axp192_read(&axp, AXP192_ACIN_VOLTAGE, &vacin);
 axp192_read(&axp, AXP192_ACIN_CURRENT, &iacin);
 axp192_read(&axp, AXP192_VBUS_VOLTAGE, &vvbus);
@@ -58,21 +58,20 @@ axp192_read(&axp, AXP192_CHARGE_STATUS, &charge);
 
 printf("power: 0x%02x charge: 0x%02x", power, charge);
 
-axp192_ioctl(&axp, AXP192_COULOMB_COUNTER_ENABLE, NULL);
+axp192_ioctl(&axp, AXP192_COULOMB_COUNTER_ENABLE);
 axp192_read(&axp, AXP192_COULOMB_COUNTER, &cbat);
 
 printf("cbat: %.2fmAh", cbat);
 
 /* Misc ioctl functions. */
+axp192_ioctl(&axp, AXP192_LDO2_ENABLE);
+axp192_ioctl(&axp, AXP192_LDO2_DISABLE);
 
-axp192_ioctl(&axp, AXP192_LDO2_SET_CONTROL, AXP192_DISABLE);
-axp192_ioctl(&axp, AXP192_LDO2_SET_CONTROL, AXP192_ENABLE);
+axp192_ioctl(&axp, AXP192_LDO3_ENABLE);
+axp192_ioctl(&axp, AXP192_LDO3_DISABLE);
 
-axp192_ioctl(&axp, AXP192_LDO3_SET_CONTROL, AXP192_DISABLE);
-axp192_ioctl(&axp, AXP192_LDO3_SET_CONTROL, AXP192_ENABLE);
-
-axp192_ioctl(&axp, AXP192_DCDC3_SET_CONTROL, AXP192_DISABLE);
-axp192_ioctl(&axp, AXP192_DCDC3_SET_CONTROL, AXP192_ENABLE);
+axp192_ioctl(&axp, AXP192_DCDC3_ENABLE);
+axp192_ioctl(&axp, AXP192_DCDC3_DISABLE);
 
 axp192_ioctl(&axp, AXP192_GPIO0_SET_LEVEL, AXP192_HIGH);
 axp192_ioctl(&axp, AXP192_GPIO0_SET_LEVEL, AXP192_LOW);
