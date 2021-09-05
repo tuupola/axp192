@@ -261,6 +261,7 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, int command, ...)
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
     /* This is currently untested. */
+    case AXP192_DCDC1_SET_VOLTAGE:
     case AXP192_DCDC3_SET_VOLTAGE:
         va_start(ap, command);
         argument = (uint16_t) va_arg(ap, int);
