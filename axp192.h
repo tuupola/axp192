@@ -149,15 +149,15 @@ extern "C" {
 #define AXP192_COULOMB_COUNTER_SUSPEND  (0xb803)
 #define AXP192_COULOMB_COUNTER_CLEAR    (0xb804)
 
-#define AXP192_DISABLE                  (&(uint8_t){0})
-#define AXP192_ENABLE                   (&(uint8_t){1})
+#define AXP192_LDO2_ENABLE              (0x1200)
+#define AXP192_LDO2_DISABLE             (0x1201)
+#define AXP192_LDO3_ENABLE              (0x1202)
+#define AXP192_LDO3_DISABLE             (0x1203)
+#define AXP192_DCDC3_ENABLE             (0x1204)
+#define AXP192_DCDC3_DISABLE            (0x1205)
 
-#define AXP192_LDO2_SET_CONTROL         (0x1200)
-#define AXP192_LDO3_SET_CONTROL         (0x1201)
-#define AXP192_DCDC3_SET_CONTROL        (0x1202)
-
-#define AXP192_LOW                      (&(uint8_t){0})
-#define AXP192_HIGH                     (&(uint8_t){1})
+#define AXP192_LOW                      (0)
+#define AXP192_HIGH                     (1)
 
 #define AXP192_GPIO0_SET_LEVEL          (0x9400)
 #define AXP192_GPIO1_SET_LEVEL          (0x9401)
@@ -185,7 +185,7 @@ typedef int32_t axp192_err_t;
 
 axp192_err_t axp192_init(const axp192_t *axp);
 axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, void *buffer);
-axp192_err_t axp192_ioctl(const axp192_t *axp, uint16_t command, uint8_t *buffer);
+axp192_err_t axp192_ioctl(const axp192_t *axp, int command, ...);
 
 #ifdef __cplusplus
 }
