@@ -170,7 +170,8 @@ axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, void *buffer) {
 axp192_err_t axp192_ioctl(const axp192_t *axp, int command, ...)
 {
     uint8_t reg = command >> 8;
-    uint8_t tmp, argument;
+    uint8_t tmp;
+    uint16_t argument;
     va_list ap;
 
     switch (command) {
@@ -257,6 +258,20 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, int command, ...)
         } else {
             tmp &= ~0b00000001;
         }
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        break;
+    /* This is currently untested. */
+    case AXP192_DCDC3_SET_VOLTAGE:
+        va_start(ap, command);
+        argument = (uint16_t) va_arg(ap, int);
+        va_end(ap);
+
+        /*  700-3500mv 25mV per step */
+        if ((argument < 700) || (argument > 3500)) {
+            return AXP192_ERROR_EINVAL;
+        }
+        tmp = (argument - 700) / 25;
+
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
     }

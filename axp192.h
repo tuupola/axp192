@@ -156,6 +156,8 @@ extern "C" {
 #define AXP192_DCDC3_ENABLE             (0x1204)
 #define AXP192_DCDC3_DISABLE            (0x1205)
 
+#define AXP192_DCDC3_SET_VOLTAGE        (0x2700)
+
 #define AXP192_LOW                      (0)
 #define AXP192_HIGH                     (1)
 
@@ -167,6 +169,7 @@ extern "C" {
 /* Error codes */
 #define AXP192_OK                       (0)
 #define AXP192_ERROR_NOTTY              (-1)
+#define AXP192_ERROR_EINVAL             (-22)
 
 typedef struct {
     uint8_t command;
