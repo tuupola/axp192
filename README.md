@@ -87,4 +87,30 @@ axp192_ioctl(&axp, AXP192_GPIO4_SET_LEVEL, AXP192_HIGH);
 axp192_ioctl(&axp, AXP192_GPIO4_SET_LEVEL, AXP192_LOW);
 ```
 
+### Notes
 
+| Output | Type | Example usage | Voltage   | Amperage |
+|--------|------|---------------|-----------|----------|
+| DCDC1  | Buck | 3.3V IO       | 0v7-3v5   | 1200mA   |
+| DCDC2  | Buck | 1.25Vcore     | 0v7-2v275 | 1600mA   |
+| DCDC3  | Buck | 2.5Vddr       | 0v7-3v5   | 700mA    |
+| LDO1   | LDO  | RTC           | 3v3       | 30mA     |
+| LDO2   | LDO  | Analog/FM     | 1v8-3v3   | 200mA    |
+| LDO3   | LDO  | 1.8V HDMI     | 1v8-3v3   | 200mA    |
+| LDOIO0 | LDO  | Vmic          | 1v8-3v3   | 50mA     |
+
+LDO1 cannot be configured and it is always on.
+
+| Output | M5StickC      | M5Core2   |
+|--------|---------------|-----------|
+| DCDC1  | VESP_3V3      | MCU_VDD   |
+| DCDC2  |               |           |
+| DCDC3  |               | LCD_BL    |
+| LDO1   | RTC_VCC       | RTC_VDD   |
+| LDO2   | LCD_BL_VCC    | PERI_VDD  |
+| LDO3   | LCD_LOGIC_VCC | VIB_MOTOR |
+| LDOIO0 | MIC_VCC       | BUS_PW_EN |
+| IO1    |               | SYS_LED   |
+| IO2    |               | SPK_EN    |
+| IO3    |               |           |
+| IO4    |               | LCD_RST   |
