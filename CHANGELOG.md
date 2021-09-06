@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file, in reverse 
 ### Added
 
 - Support for reading raw register values ([#24](https://github.com/tuupola/axp192/pull/24))
+- Support for manually setting the rail voltages ([#27](https://github.com/tuupola/axp192/pull/27))
 
 ### Removed
 
