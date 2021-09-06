@@ -159,6 +159,7 @@ extern "C" {
 #define AXP192_DCDC1_SET_VOLTAGE        (0x2600)
 #define AXP192_DCDC2_SET_VOLTAGE        (0x2300)
 #define AXP192_DCDC3_SET_VOLTAGE        (0x2700)
+#define AXP192_LDO2_SET_VOLTAGE         (0x2800)
 
 #define AXP192_LOW                      (0)
 #define AXP192_HIGH                     (1)
