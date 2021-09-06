@@ -28,7 +28,7 @@ This file is part of hardware agnostic I2C driver for AXP192:
 https://github.com/tuupola/axp192
 
 SPDX-License-Identifier: MIT
-Version: 0.5.0
+Version: 0.6.0-dev
 
 */
 
@@ -260,9 +260,7 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, int command, ...)
         }
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
-    /* This is currently untested. */
     case AXP192_DCDC1_SET_VOLTAGE:
-    /* This is currently untested. */
     case AXP192_DCDC3_SET_VOLTAGE:
         va_start(ap, command);
         argument = (uint16_t) va_arg(ap, int);
