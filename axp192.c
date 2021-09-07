@@ -227,6 +227,17 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, int command, ...)
         tmp &= ~0b00001000;
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
+    case AXP192_DCDC1_ENABLE:
+        axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        tmp |= 0b00000001;
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        break;
+    /* This is currently untested. */
+    case AXP192_DCDC1_DISABLE:
+        axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        tmp &= ~0b00000001;
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        break;
     case AXP192_DCDC3_ENABLE:
         axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         tmp |= 0b00000010;
