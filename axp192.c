@@ -195,11 +195,15 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, int command, ...)
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
     case AXP192_LDO2_ENABLE:
+    /* This is currently untested. */
+    case AXP192_EXTEN_ENABLE:
         axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         tmp |= 0b00000100;
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
     case AXP192_LDO2_DISABLE:
+    /* This is currently untested. */
+    case AXP192_EXTEN_DISABLE:
         axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         tmp &= ~0b00000100;
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);

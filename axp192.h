@@ -151,6 +151,8 @@ extern "C" {
 
 #define AXP192_DCDC2_ENABLE             (0x1000)
 #define AXP192_DCDC2_DISABLE            (0x1001)
+#define AXP192_EXTEN_ENABLE             (0x1002)
+#define AXP192_EXTEN_DISABLE            (0x1003)
 
 #define AXP192_LDO2_ENABLE              (0x1200)
 #define AXP192_LDO2_DISABLE             (0x1201)
