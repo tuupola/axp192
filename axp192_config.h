@@ -28,7 +28,7 @@ This file is part of hardware agnostic I2C driver for AXP192:
 https://github.com/tuupola/axp192
 
 SPDX-License-Identifier: MIT
-Version: 0.5.0
+Version: 0.6.0-dev
 
 */
 
@@ -39,6 +39,7 @@ Version: 0.5.0
 extern "C" {
 #endif
 
+#ifdef AXP192_INCLUDE_SDKCONFIG_H
 #include "sdkconfig.h"
 
 /* This requires you to run menuconfig first. */
@@ -115,6 +116,8 @@ extern "C" {
 #define CONFIG_AXP192_GPIO0_LDOIO0_VOLTAGE ( \
     CONFIG_AXP192_GPIO0_LDOIO0_VOLTAGE_BIT74 \
 )
+
+#endif /* AXP192_INCLUDE_SDKCONFIG_H */
 
 #ifdef __cplusplus
 }
