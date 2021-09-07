@@ -58,7 +58,7 @@ axp192_ioctl(&axp, AXP192_LDOIO0_SET_VOLTAGE, 3300);
 axp192_ioctl(&axp, AXP192_LDO2_SET_VOLTAGE, 3300);
 axp192_ioctl(&axp, AXP192_LDO3_SET_VOLTAGE, 3300);
 
-/* axp192_ioctl(&axp, AXP192_DCDC1_ENABLE); */
+axp192_ioctl(&axp, AXP192_DCDC1_ENABLE);
 /* axp192_ioctl(&axp, AXP192_DCDC2_ENABLE); */
 axp192_ioctl(&axp, AXP192_DCDC3_ENABLE);
 /* axp192_ioctl(&axp, AXP192_LDOIO0_ENABLE); */
@@ -111,21 +111,25 @@ printf("power: 0x%02x charge: 0x%02x", power, charge);
 ```c
 /* Shortcuts for common tasks which otherwise would require */
 /* multiple steps or function calls. */
-axp192_ioctl(&axp, AXP192_LDO2_ENABLE);
-axp192_ioctl(&axp, AXP192_LDO2_DISABLE);
-
-axp192_ioctl(&axp, AXP192_LDO3_ENABLE);
-axp192_ioctl(&axp, AXP192_LDO3_DISABLE);
-
-axp192_ioctl(&axp, AXP192_DCDC3_ENABLE);
-axp192_ioctl(&axp, AXP192_DCDC3_DISABLE);
-
 axp192_ioctl(&axp, AXP192_DCDC1_SET_VOLTAGE, 3300);
 axp192_ioctl(&axp, AXP192_DCDC2_SET_VOLTAGE, 2275);
 axp192_ioctl(&axp, AXP192_DCDC3_SET_VOLTAGE, 3300);
 axp192_ioctl(&axp, AXP192_LDOIO0_SET_VOLTAGE, 3300);
 axp192_ioctl(&axp, AXP192_LDO2_SET_VOLTAGE, 3300);
 axp192_ioctl(&axp, AXP192_LDO3_SET_VOLTAGE, 3300);
+
+axp192_ioctl(&axp, AXP192_LDO2_ENABLE);
+axp192_ioctl(&axp, AXP192_LDO2_DISABLE);
+
+axp192_ioctl(&axp, AXP192_LDO3_ENABLE);
+axp192_ioctl(&axp, AXP192_LDO3_DISABLE);
+
+/* Do not disable DCDC1 unless you know what you are doing. */
+axp192_ioctl(&axp, AXP192_DCDC1_ENABLE);
+axp192_ioctl(&axp, AXP192_DCDC1_DISABLE);
+
+axp192_ioctl(&axp, AXP192_DCDC3_ENABLE);
+axp192_ioctl(&axp, AXP192_DCDC3_DISABLE);
 
 axp192_ioctl(&axp, AXP192_GPIO0_SET_LEVEL, AXP192_HIGH);
 axp192_ioctl(&axp, AXP192_GPIO0_SET_LEVEL, AXP192_LOW);
