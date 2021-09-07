@@ -9,7 +9,11 @@ int32_t i2c_write(void *handle, uint8_t address, uint8_t reg, const uint8_t *buf
 
 Where `address` is the I2C address, `reg` is the register to read or write, `buffer` holds the data to write or read into and `size` is the amount of data to read or write. The `handle` parameter is an optional customizable argument. You can use it if your I2C implementation requires any additional information such has number of the hardware I2C driver. For example HAL implementation see [ESP I2C helper](https://github.com/tuupola/esp_i2c_helper). For working example see [M5StickC kitchen sink](https://github.com/tuupola/esp_m5stick).
 
-## Usage
+## Configuration
+
+With platforms such as ESP-IDF you can use menuconfig and a single call to `axp192_init()` to configure the chip. When configuring pay attention to which power rails are enabled and what voltage they are configured to.
+
+Pay especially attention to `DCDC1` which is usually used for powering the MCU. Your program disabling the power from the MCU upon boot basically bricks the board. Reviving the board from this situation is possible but might be difficult.
 
 ```
 $ make menuconfig
@@ -19,8 +23,6 @@ $ make menuconfig
 #include "axp192.h"
 #include "user_i2c.h"
 
-float vacin, iacin, vvbus, ivbus, temp, pbat, vbat, icharge, idischarge, vaps, cbat;
-uint8_t power, charge;
 axp192_t axp;
 
 /* Add pointers to HAL functions. */
@@ -31,6 +33,49 @@ axp.write = &user_i2c_write;
 axp.handle = NULL;
 
 axp192_init(&axp);
+```
+
+If your system does not use menuconfig you cannot use `axp192_init()`. Instead configure the chip manually with the needed calls to `axp192_ioctl()` function. Again pay attention when configuring the power rails. You do not want to shut down the MCU.
+
+```c
+#include "axp192.h"
+#include "user_i2c.h"
+
+axp192_t axp;
+
+/* Add pointers to HAL functions. */
+axp.read = &user_i2c_read;
+axp.write = &user_i2c_write;
+
+/* You could set the handle here. It can be pointer to anything. */
+axp.handle = NULL;
+
+/* Be careful when setting voltages not to brick your board. */
+axp192_ioctl(&axp, AXP192_DCDC1_SET_VOLTAGE, 3300);
+axp192_ioctl(&axp, AXP192_DCDC2_SET_VOLTAGE, 2275);
+axp192_ioctl(&axp, AXP192_DCDC3_SET_VOLTAGE, 3300);
+axp192_ioctl(&axp, AXP192_LDOIO0_SET_VOLTAGE, 3300);
+axp192_ioctl(&axp, AXP192_LDO2_SET_VOLTAGE, 3300);
+axp192_ioctl(&axp, AXP192_LDO3_SET_VOLTAGE, 3300);
+
+/* axp192_ioctl(&axp, AXP192_DCDC1_ENABLE); */
+/* axp192_ioctl(&axp, AXP192_DCDC2_ENABLE); */
+axp192_ioctl(&axp, AXP192_DCDC3_ENABLE);
+/* axp192_ioctl(&axp, AXP192_LDOIO0_ENABLE); */
+axp192_ioctl(&axp, AXP192_LDO2_ENABLE);
+axp192_ioctl(&axp, AXP192_LDO3_ENABLE);
+
+axp192_ioctl(&axp, AXP192_COULOMB_COUNTER_ENABLE);
+```
+
+### Usage
+
+Use `axp192_read()` to read the values of the registers. All the
+ADC registers will be read as floats. All other registers will be treated as raw bytes.
+See `axp192.h` or datasheet for all possible registers and how to intepret the values.
+
+```c
+float vacin, iacin, vvbus, ivbus, temp, pbat, vbat, icharge, idischarge, vaps, cbat;
 
 /* All ADC registers will be read as floats. */
 axp192_read(&axp, AXP192_ACIN_VOLTAGE, &vacin);
@@ -44,25 +89,26 @@ axp192_read(&axp, AXP192_BATTERY_VOLTAGE, &vbat);
 axp192_read(&axp, AXP192_CHARGE_CURRENT, &icharge);
 axp192_read(&axp, AXP192_DISCHARGE_CURRENT, &idischarge);
 axp192_read(&axp, AXP192_APS_VOLTAGE, &vaps);
+axp192_read(&axp, AXP192_COULOMB_COUNTER, &cbat);
 
 printf(
     "vacin: %.2fV iacin: %.2fA vvbus: %.2fV ivbus: %.2fA vts: %.2fV temp: %.0fC "
-    "pbat: %.2fmW vbat: %.2fV icharge: %.2fA idischarge: %.2fA, vaps: %.2fV",
-    vacin, iacin, vvbus, ivbus, vts, temp, pbat, vbat, icharge, idischarge, vaps
+    "pbat: %.2fmW vbat: %.2fV icharge: %.2fA idischarge: %.2fA, vaps: %.2fV cbat: %.2fmAh",
+    vacin, iacin, vvbus, ivbus, vts, temp, pbat, vbat, icharge, idischarge, vaps, cbat
 );
+```
+
+```c
+uint8_t power, charge;
 
 /* All non ADC registers will be read as a raw bytes. */
-/* See axp192.h or datasheet for all possible registers. */
 axp192_read(&axp, AXP192_POWER_STATUS, &power);
 axp192_read(&axp, AXP192_CHARGE_STATUS, &charge);
 
 printf("power: 0x%02x charge: 0x%02x", power, charge);
+```
 
-axp192_ioctl(&axp, AXP192_COULOMB_COUNTER_ENABLE);
-axp192_read(&axp, AXP192_COULOMB_COUNTER, &cbat);
-
-printf("cbat: %.2fmAh", cbat);
-
+```c
 /* Shortcuts for common tasks which otherwise would require */
 /* multiple steps or function calls. */
 axp192_ioctl(&axp, AXP192_LDO2_ENABLE);
@@ -94,7 +140,7 @@ axp192_ioctl(&axp, AXP192_GPIO4_SET_LEVEL, AXP192_HIGH);
 axp192_ioctl(&axp, AXP192_GPIO4_SET_LEVEL, AXP192_LOW);
 ```
 
-### Notes
+## Notes
 
 | Output | Type | Example usage | Voltage   | Amperage |
 |--------|------|---------------|-----------|----------|
