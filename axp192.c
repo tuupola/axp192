@@ -194,6 +194,18 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, int command, ...)
         tmp = 0b10100000;
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
+    /* This is currently untested. */
+    case AXP192_LDOIO0_ENABLE:
+        /* 0x02 = LDO */
+        tmp = 0b00000010;
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        break;
+    /* This is currently untested. */
+    case AXP192_LDOIO0_DISABLE:
+        /* 0x07 = float */
+        tmp = 0b00000111;
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        break;
     case AXP192_LDO2_ENABLE:
     /* This is currently untested. */
     case AXP192_EXTEN_ENABLE:

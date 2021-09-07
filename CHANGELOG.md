@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file, in reverse 
 - Support for manually enablind and disabling DCDC1 ([#29](https://github.com/tuupola/axp192/pull/29))
 - Support for manually enablind and disabling DCDC2 ([#30](https://github.com/tuupola/axp192/pull/30))
 - Support for manually enablind and disabling EXTEN ([#31](https://github.com/tuupola/axp192/pull/31))
+- Support for manually enablind and disabling LDOIO0 ([#32](https://github.com/tuupola/axp192/pull/32))
 
 ### Removed
 

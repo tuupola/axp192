@@ -149,6 +149,9 @@ extern "C" {
 #define AXP192_COULOMB_COUNTER_SUSPEND  (0xb803)
 #define AXP192_COULOMB_COUNTER_CLEAR    (0xb804)
 
+#define AXP192_LDOIO0_ENABLE            (0x9000)
+#define AXP192_LDOIO0_DISABLE           (0x9001)
+
 #define AXP192_DCDC2_ENABLE             (0x1000)
 #define AXP192_DCDC2_DISABLE            (0x1001)
 #define AXP192_EXTEN_ENABLE             (0x1002)
