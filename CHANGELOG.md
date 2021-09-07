@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 - Support for reading raw register values ([#24](https://github.com/tuupola/axp192/pull/24))
 - Support for manually setting the rail voltages ([#27](https://github.com/tuupola/axp192/pull/27))
+- Support for manually enablind and disabling DCDC1 ([#29](https://github.com/tuupola/axp192/pull/29))
 
 ### Removed
 
