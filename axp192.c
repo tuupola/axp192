@@ -28,7 +28,7 @@ This file is part of hardware agnostic I2C driver for AXP192:
 https://github.com/tuupola/axp192
 
 SPDX-License-Identifier: MIT
-Version: 0.5.0
+Version: 0.6.0-dev
 
 */
 
@@ -170,7 +170,8 @@ axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, void *buffer) {
 axp192_err_t axp192_ioctl(const axp192_t *axp, int command, ...)
 {
     uint8_t reg = command >> 8;
-    uint8_t tmp, argument;
+    uint8_t tmp;
+    uint16_t argument;
     va_list ap;
 
     switch (command) {
@@ -257,6 +258,82 @@ axp192_err_t axp192_ioctl(const axp192_t *axp, int command, ...)
         } else {
             tmp &= ~0b00000001;
         }
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        break;
+    case AXP192_DCDC1_SET_VOLTAGE:
+    case AXP192_DCDC3_SET_VOLTAGE:
+        va_start(ap, command);
+        argument = (uint16_t) va_arg(ap, int);
+        va_end(ap);
+
+        /*  700-3500mv 25mV per step */
+        if ((argument < 700) || (argument > 3500)) {
+            return AXP192_ERROR_EINVAL;
+        }
+        tmp = (argument - 700) / 25;
+
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        break;
+    /* This is currently untested. */
+    case AXP192_DCDC2_SET_VOLTAGE:
+        va_start(ap, command);
+        argument = (uint16_t) va_arg(ap, int);
+        va_end(ap);
+
+        /*  700-2275mV 25mV per step */
+        if ((argument < 700) || (argument > 2275)) {
+            return AXP192_ERROR_EINVAL;
+        }
+        tmp = (argument - 700) / 25;
+
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        break;
+    /* This is currently untested. */
+    case AXP192_LDO2_SET_VOLTAGE:
+        va_start(ap, command);
+        argument = (uint16_t) va_arg(ap, int);
+        va_end(ap);
+
+        /*  1800-3300mV 100mV per step */
+        if ((argument < 1800) || (argument > 3300)) {
+            return AXP192_ERROR_EINVAL;
+        }
+        axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+
+        tmp &= ~0xf0;
+        tmp |= (((argument - 1800) / 100) << 4);
+
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        break;
+    /* This is currently untested. */
+    case AXP192_LDO3_SET_VOLTAGE:
+        va_start(ap, command);
+        argument = (uint16_t) va_arg(ap, int);
+        va_end(ap);
+
+        /*  1800-3300mV 100mV per step */
+        if ((argument < 1800) || (argument > 3300)) {
+            return AXP192_ERROR_EINVAL;
+        }
+        axp->read(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+
+        tmp &= ~0x0f;
+        tmp |= ((argument - 1800) / 100);
+
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
+        break;
+    /* This is currently untested. */
+    case AXP192_LDOIO0_SET_VOLTAGE:
+        va_start(ap, command);
+        argument = (uint16_t) va_arg(ap, int);
+        va_end(ap);
+
+        /*  1800-3300mV 100mV per step, 2800mV default. */
+        if ((argument < 1800) || (argument > 3300)) {
+            return AXP192_ERROR_EINVAL;
+        }
+        tmp = (((argument - 1800) / 100) << 4);
+
         return axp->write(axp->handle, AXP192_ADDRESS, reg, &tmp, 1);
         break;
     }

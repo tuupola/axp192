@@ -28,7 +28,7 @@ This file is part of hardware agnostic I2C driver for AXP192:
 https://github.com/tuupola/axp192
 
 SPDX-License-Identifier: MIT
-Version: 0.5.0
+Version: 0.6.0-dev
 
 */
 
@@ -156,6 +156,13 @@ extern "C" {
 #define AXP192_DCDC3_ENABLE             (0x1204)
 #define AXP192_DCDC3_DISABLE            (0x1205)
 
+#define AXP192_DCDC1_SET_VOLTAGE        (0x2600)
+#define AXP192_DCDC2_SET_VOLTAGE        (0x2300)
+#define AXP192_DCDC3_SET_VOLTAGE        (0x2700)
+#define AXP192_LDO2_SET_VOLTAGE         (0x2800)
+#define AXP192_LDO3_SET_VOLTAGE         (0x2801)
+#define AXP192_LDOIO0_SET_VOLTAGE       (0x9100)
+
 #define AXP192_LOW                      (0)
 #define AXP192_HIGH                     (1)
 
@@ -167,6 +174,7 @@ extern "C" {
 /* Error codes */
 #define AXP192_OK                       (0)
 #define AXP192_ERROR_NOTTY              (-1)
+#define AXP192_ERROR_EINVAL             (-22)
 
 typedef struct {
     uint8_t command;
