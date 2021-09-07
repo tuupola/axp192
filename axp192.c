@@ -42,6 +42,8 @@ static axp192_err_t read_coloumb_counter(const axp192_t *axp, float *buffer);
 static axp192_err_t read_battery_power(const axp192_t *axp, float *buffer);
 
 static const axp192_init_command_t init_commands[] = {
+#ifdef AXP192_INCLUDE_SDKCONFIG_H
+    /* Currently you have to use menuconfig to be able to use axp192_init() */
     {AXP192_DCDC1_VOLTAGE, {CONFIG_AXP192_DCDC1_VOLTAGE}, 1},
     {AXP192_DCDC3_VOLTAGE, {CONFIG_AXP192_DCDC3_VOLTAGE}, 1},
     {AXP192_LDO23_VOLTAGE, {CONFIG_AXP192_LDO23_VOLTAGE}, 1},
@@ -55,6 +57,7 @@ static const axp192_init_command_t init_commands[] = {
     {AXP192_ADC_ENABLE_1, {CONFIG_AXP192_ADC_ENABLE_1}, 1},
     {AXP192_CHARGE_CONTROL_1, {CONFIG_AXP192_CHARGE_CONTROL_1}, 1},
     {AXP192_BATTERY_CHARGE_CONTROL, {CONFIG_AXP192_BATTERY_CHARGE_CONTROL}, 1},
+#endif /* AXP192_INCLUDE_SDKCONFIG_H */
     /* End of commands. */
     {0, {0}, 0xff},
 };

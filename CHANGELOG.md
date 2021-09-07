@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
+- Using menuconfig is now optional ([#28](https://github.com/tuupola/axp192/pull/28)).
 - Third parameter of `axp192_ioctl()` is now optional ([#26](https://github.com/tuupola/axp192/pull/26)).
 - Splitted AXP192_LDO2_SET_CONTROL to separate commands ([#26](https://github.com/tuupola/axp192/pull/26)).
     ```c
