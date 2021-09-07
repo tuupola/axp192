@@ -149,14 +149,17 @@ extern "C" {
 #define AXP192_COULOMB_COUNTER_SUSPEND  (0xb803)
 #define AXP192_COULOMB_COUNTER_CLEAR    (0xb804)
 
+#define AXP192_DCDC2_ENABLE             (0x1000)
+#define AXP192_DCDC2_DISABLE            (0x1001)
+
 #define AXP192_LDO2_ENABLE              (0x1200)
 #define AXP192_LDO2_DISABLE             (0x1201)
 #define AXP192_LDO3_ENABLE              (0x1202)
 #define AXP192_LDO3_DISABLE             (0x1203)
 #define AXP192_DCDC1_ENABLE             (0x1204)
 #define AXP192_DCDC1_DISABLE            (0x1205)
-#define AXP192_DCDC3_ENABLE             (0x1208)
-#define AXP192_DCDC3_DISABLE            (0x1209)
+#define AXP192_DCDC3_ENABLE             (0x1206)
+#define AXP192_DCDC3_DISABLE            (0x1207)
 
 #define AXP192_DCDC1_SET_VOLTAGE        (0x2600)
 #define AXP192_DCDC2_SET_VOLTAGE        (0x2300)

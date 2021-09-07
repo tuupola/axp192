@@ -59,7 +59,7 @@ axp192_ioctl(&axp, AXP192_LDO2_SET_VOLTAGE, 3300);
 axp192_ioctl(&axp, AXP192_LDO3_SET_VOLTAGE, 3300);
 
 axp192_ioctl(&axp, AXP192_DCDC1_ENABLE);
-/* axp192_ioctl(&axp, AXP192_DCDC2_ENABLE); */
+axp192_ioctl(&axp, AXP192_DCDC2_ENABLE);
 axp192_ioctl(&axp, AXP192_DCDC3_ENABLE);
 /* axp192_ioctl(&axp, AXP192_LDOIO0_ENABLE); */
 axp192_ioctl(&axp, AXP192_LDO2_ENABLE);
@@ -127,6 +127,9 @@ axp192_ioctl(&axp, AXP192_LDO3_DISABLE);
 /* Do not disable DCDC1 unless you know what you are doing. */
 axp192_ioctl(&axp, AXP192_DCDC1_ENABLE);
 axp192_ioctl(&axp, AXP192_DCDC1_DISABLE);
+
+axp192_ioctl(&axp, AXP192_DCDC2_ENABLE);
+axp192_ioctl(&axp, AXP192_DCDC2_DISABLE);
 
 axp192_ioctl(&axp, AXP192_DCDC3_ENABLE);
 axp192_ioctl(&axp, AXP192_DCDC3_DISABLE);
