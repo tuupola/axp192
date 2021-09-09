@@ -170,6 +170,29 @@ axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, void *buffer) {
     }
 }
 
+axp192_err_t axp192_write(const axp192_t *axp, uint8_t reg, const uint8_t *buffer) {
+    switch (reg) {
+    case AXP192_ACIN_VOLTAGE:
+    case AXP192_VBUS_VOLTAGE:
+    case AXP192_ACIN_CURRENT:
+    case AXP192_VBUS_CURRENT:
+    case AXP192_TEMP:
+    case AXP192_TS_INPUT:
+    case AXP192_BATTERY_POWER:
+    case AXP192_BATTERY_VOLTAGE:
+    case AXP192_CHARGE_CURRENT:
+    case AXP192_DISCHARGE_CURRENT:
+    case AXP192_APS_VOLTAGE:
+    case AXP192_COULOMB_COUNTER:
+        /* Read only register. */
+        return AXP192_ERROR_ENOTSUP;
+        break;
+    default:
+        /* Write raw register value. */
+        return axp->write(axp->handle, AXP192_ADDRESS, reg, buffer, 1);
+    }
+}
+
 axp192_err_t axp192_ioctl(const axp192_t *axp, int command, ...)
 {
     uint8_t reg = command >> 8;
