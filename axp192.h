@@ -185,6 +185,7 @@ extern "C" {
 #define AXP192_OK                       (0)
 #define AXP192_ERROR_NOTTY              (-1)
 #define AXP192_ERROR_EINVAL             (-22)
+#define AXP192_ERROR_ENOTSUP            (-95)
 
 typedef struct {
     uint8_t command;
@@ -203,6 +204,7 @@ typedef int32_t axp192_err_t;
 
 axp192_err_t axp192_init(const axp192_t *axp);
 axp192_err_t axp192_read(const axp192_t *axp, uint8_t reg, void *buffer);
+axp192_err_t axp192_write(const axp192_t *axp, uint8_t reg, const uint8_t *buffer);
 axp192_err_t axp192_ioctl(const axp192_t *axp, int command, ...);
 
 #ifdef __cplusplus
