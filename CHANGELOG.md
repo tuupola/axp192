@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file, in reverse 
 - Support for manually enablind and disabling DCDC2 ([#30](https://github.com/tuupola/axp192/pull/30))
 - Support for manually enablind and disabling EXTEN ([#31](https://github.com/tuupola/axp192/pull/31))
 - Support for manually enablind and disabling LDOIO0 ([#32](https://github.com/tuupola/axp192/pull/32))
+- Support for writing a raw byte directly to a register([#33](https://github.com/tuupola/axp192/pull/33))
 
 ### Removed
 

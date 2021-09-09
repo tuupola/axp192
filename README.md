@@ -7,7 +7,7 @@ int32_t i2c_read(void *handle, uint8_t address, uint8_t reg, uint8_t *buffer, ui
 int32_t i2c_write(void *handle, uint8_t address, uint8_t reg, const uint8_t *buffer, uint16_t size);
 ```
 
-Where `address` is the I2C address, `reg` is the register to read or write, `buffer` holds the data to write or read into and `size` is the amount of data to read or write. The `handle` parameter is an optional customizable argument. You can use it if your I2C implementation requires any additional information such has number of the hardware I2C driver. For example HAL implementation see [ESP I2C helper](https://github.com/tuupola/esp_i2c_helper). For working example see [M5StickC kitchen sink](https://github.com/tuupola/esp_m5stick).
+Where `address` is the I2C address, `reg` is the register to read or write, `buffer` holds the data to write or read into and `size` is the amount of data to read or write. The `handle` parameter is an optional customizable argument. You can use it if your I2C implementation requires any additional information such has number of the hardware I2C driver. For example implementation see [ESP I2C helper](https://github.com/tuupola/esp_i2c_helper). For working demo see [M5StickC kitchen sink](https://github.com/tuupola/esp_m5stick).
 
 ## Configuration
 
@@ -25,7 +25,7 @@ $ make menuconfig
 
 axp192_t axp;
 
-/* Add pointers to HAL functions. */
+/* Add pointers to the glue functions. */
 axp.read = &user_i2c_read;
 axp.write = &user_i2c_write;
 
@@ -109,9 +109,16 @@ axp192_read(&axp, AXP192_CHARGE_STATUS, &charge);
 printf("power: 0x%02x charge: 0x%02x", power, charge);
 ```
 
+You can use `axp192_write()` to write a single raw byte directly to a register.
+
 ```c
-/* Shortcuts for common tasks which otherwise would require */
-/* multiple steps or function calls. */
+uint8_t buffer = 0xde;
+axp192_write(&axp, AXP192_DATA_BUFFER0, &buffer);
+```
+
+However common configuration tasks are also provided as an `axp192_ioctl()` call.
+
+```c
 axp192_ioctl(&axp, AXP192_DCDC1_SET_VOLTAGE, 3300);
 axp192_ioctl(&axp, AXP192_DCDC2_SET_VOLTAGE, 2275);
 axp192_ioctl(&axp, AXP192_DCDC3_SET_VOLTAGE, 3300);
