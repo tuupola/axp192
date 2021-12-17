@@ -28,7 +28,7 @@ This file is part of hardware agnostic I2C driver for AXP192:
 https://github.com/tuupola/axp192
 
 SPDX-License-Identifier: MIT
-Version: 0.6.0-dev
+Version: 0.6.0
 
 */
 

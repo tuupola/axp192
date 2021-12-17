@@ -2,7 +2,10 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## [0.6.0-dev](https://github.com/tuupola/axp192/compare/0.5.0...master) - unreleased
+## [0.6.0](https://github.com/tuupola/axp192/compare/0.5.0...0.6.0) - 2021-12-17
+
+### Fixed
+- All outputs are now enabled by default ([#35](https://github.com/tuupola/axp192/pull/35))
 
 ### Added
 
