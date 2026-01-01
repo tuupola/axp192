@@ -85,6 +85,23 @@ should_fail_write_battery_voltage(void)
 }
 
 TEST
+should_write_data_buffer(void)
+{
+    axp192_t axp;
+    uint8_t buffer = 0xDE;
+
+    axp.read = &mock_i2c_read;
+    axp.write = &mock_i2c_write;
+
+    extern uint8_t memory[];
+
+    ASSERT(AXP192_OK == axp192_write(&axp, AXP192_DATA_BUFFER0, &buffer));
+    ASSERT(0xDE == memory[AXP192_DATA_BUFFER0]);
+
+    PASS();
+}
+
+TEST
 should_set_dcdc1_voltage(void)
 {
     axp192_t axp;
@@ -145,6 +162,7 @@ main(int argc, char **argv)
     RUN_TEST(should_init);
     RUN_TEST(should_read_battery_voltage);
     RUN_TEST(should_fail_write_battery_voltage);
+    RUN_TEST(should_write_data_buffer);
     RUN_TEST(should_set_dcdc1_voltage);
     RUN_TEST(should_enable_dcdc1);
     RUN_TEST(should_disable_dcdc1);
