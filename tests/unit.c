@@ -38,7 +38,6 @@ should_pass(void)
     PASS();
 }
 
-
 TEST
 should_init(void)
 {
@@ -47,6 +46,26 @@ should_init(void)
     axp.write = &mock_i2c_write;
 
     ASSERT(AXP192_OK == axp192_init(&axp));
+    PASS();
+}
+
+TEST
+should_read_battery_voltage(void)
+{
+    axp192_t axp;
+    float voltage;
+
+    axp.read = &mock_i2c_read;
+    axp.write = &mock_i2c_write;
+
+    /* Set mock ADC value: 0xEEA = 3818 -> 4.1998V */
+    extern uint8_t memory[];
+    memory[0x78] = 0xEE;
+    memory[0x79] = 0x0A;
+
+    ASSERT(AXP192_OK == axp192_read(&axp, AXP192_BATTERY_VOLTAGE, &voltage));
+    ASSERT(voltage > 4.19 && voltage < 4.21);
+
     PASS();
 }
 
@@ -59,6 +78,7 @@ main(int argc, char **argv)
 
     RUN_TEST(should_pass);
     RUN_TEST(should_init);
+    RUN_TEST(should_read_battery_voltage);
 
     GREATEST_MAIN_END();
 }
