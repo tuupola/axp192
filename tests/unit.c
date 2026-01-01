@@ -134,6 +134,20 @@ should_fail_invalid_dcdc1_voltage(void)
 }
 
 TEST
+should_fail_invalid_ioctl_command(void)
+{
+    axp192_t axp;
+
+    axp.read = &mock_i2c_read;
+    axp.write = &mock_i2c_write;
+
+    ASSERT(AXP192_ERROR_NOTTY == axp192_ioctl(&axp, 0xFFFF));
+
+    PASS();
+}
+
+
+TEST
 should_enable_dcdc1(void)
 {
     axp192_t axp;
@@ -181,6 +195,7 @@ main(int argc, char **argv)
     RUN_TEST(should_write_data_buffer);
     RUN_TEST(should_set_dcdc1_voltage);
     RUN_TEST(should_fail_invalid_dcdc1_voltage);
+    RUN_TEST(should_fail_invalid_ioctl_command);
     RUN_TEST(should_enable_dcdc1);
     RUN_TEST(should_disable_dcdc1);
 
