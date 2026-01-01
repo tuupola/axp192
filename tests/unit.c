@@ -117,6 +117,23 @@ should_enable_dcdc1(void)
     PASS();
 }
 
+TEST
+should_disable_dcdc1(void)
+{
+    axp192_t axp;
+
+    axp.read = &mock_i2c_read;
+    axp.write = &mock_i2c_write;
+
+    extern uint8_t memory[];
+    memory[AXP192_DCDC13_LDO23_CONTROL] = 0xFF;
+
+    ASSERT(AXP192_OK == axp192_ioctl(&axp, AXP192_DCDC1_DISABLE));
+    ASSERT(0x00 == (memory[AXP192_DCDC13_LDO23_CONTROL] & 0x01));
+
+    PASS();
+}
+
 GREATEST_MAIN_DEFS();
 
 int
@@ -130,6 +147,7 @@ main(int argc, char **argv)
     RUN_TEST(should_fail_write_battery_voltage);
     RUN_TEST(should_set_dcdc1_voltage);
     RUN_TEST(should_enable_dcdc1);
+    RUN_TEST(should_disable_dcdc1);
 
     GREATEST_MAIN_END();
 }
