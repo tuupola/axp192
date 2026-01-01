@@ -70,6 +70,24 @@ should_read_battery_voltage(void)
 }
 
 TEST
+should_read_power_status(void)
+{
+    axp192_t axp;
+    uint8_t status;
+
+    axp.read = &mock_i2c_read;
+    axp.write = &mock_i2c_write;
+
+    extern uint8_t memory[];
+    memory[AXP192_POWER_STATUS] = 0xAB;
+
+    ASSERT(AXP192_OK == axp192_read(&axp, AXP192_POWER_STATUS, &status));
+    ASSERT(0xAB == status);
+
+    PASS();
+}
+
+TEST
 should_fail_write_battery_voltage(void)
 {
     axp192_t axp;
@@ -245,6 +263,7 @@ main(int argc, char **argv)
     RUN_TEST(should_pass);
     RUN_TEST(should_init);
     RUN_TEST(should_read_battery_voltage);
+    RUN_TEST(should_read_power_status);
     RUN_TEST(should_fail_write_battery_voltage);
     RUN_TEST(should_write_data_buffer);
     RUN_TEST(should_set_dcdc1_voltage);
