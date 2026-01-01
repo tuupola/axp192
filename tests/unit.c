@@ -212,6 +212,29 @@ should_disable_dcdc1(void)
     PASS();
 }
 
+TEST
+should_preserve_bits_on_enable_disable(void)
+{
+    axp192_t axp;
+
+    axp.read = &mock_i2c_read;
+    axp.write = &mock_i2c_write;
+
+    extern uint8_t memory[];
+
+    /* Enable should preserve other bits */
+    memory[AXP192_DCDC13_LDO23_CONTROL] = 0xFE;
+    ASSERT(AXP192_OK == axp192_ioctl(&axp, AXP192_DCDC1_ENABLE));
+    ASSERT(0xFF == memory[AXP192_DCDC13_LDO23_CONTROL]);
+
+    /* Disable should preserve other bits */
+    memory[AXP192_DCDC13_LDO23_CONTROL] = 0xFF;
+    ASSERT(AXP192_OK == axp192_ioctl(&axp, AXP192_DCDC1_DISABLE));
+    ASSERT(0xFE == memory[AXP192_DCDC13_LDO23_CONTROL]);
+
+    PASS();
+}
+
 GREATEST_MAIN_DEFS();
 
 int
@@ -231,6 +254,7 @@ main(int argc, char **argv)
     RUN_TEST(should_fail_invalid_ldo2_voltage);
     RUN_TEST(should_enable_dcdc1);
     RUN_TEST(should_disable_dcdc1);
+    RUN_TEST(should_preserve_bits_on_enable_disable);
 
     GREATEST_MAIN_END();
 }
