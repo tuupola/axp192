@@ -150,6 +150,22 @@ should_fail_invalid_dcdc2_voltage(void)
 }
 
 TEST
+should_fail_invalid_ldo2_voltage(void)
+{
+    axp192_t axp;
+
+    axp.read = &mock_i2c_read;
+    axp.write = &mock_i2c_write;
+
+    /* Below minimum */
+    ASSERT(AXP192_ERROR_EINVAL == axp192_ioctl(&axp, AXP192_LDO2_SET_VOLTAGE, 1799));
+    /* Above maximum */
+    ASSERT(AXP192_ERROR_EINVAL == axp192_ioctl(&axp, AXP192_LDO2_SET_VOLTAGE, 3301));
+
+    PASS();
+}
+
+TEST
 should_fail_invalid_ioctl_command(void)
 {
     axp192_t axp;
@@ -212,6 +228,7 @@ main(int argc, char **argv)
     RUN_TEST(should_fail_invalid_dcdc1_voltage);
     RUN_TEST(should_fail_invalid_ioctl_command);
     RUN_TEST(should_fail_invalid_dcdc2_voltage);
+    RUN_TEST(should_fail_invalid_ldo2_voltage);
     RUN_TEST(should_enable_dcdc1);
     RUN_TEST(should_disable_dcdc1);
 
