@@ -188,3 +188,17 @@ LDO1 cannot be configured and it is always on.
 | IO2    |               | SPK_EN    |
 | IO3    |               |           |
 | IO4    |               | LCD_RST   |
+
+
+## Run unit tests
+
+```
+$ mkdir build && cd build
+$ cmake -DAXP192_BUILD_TESTS=ON ..
+$ make
+$ ctest
+```
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE) for more information.
