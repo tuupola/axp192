@@ -69,6 +69,21 @@ should_read_battery_voltage(void)
     PASS();
 }
 
+TEST
+should_fail_write_battery_voltage(void)
+{
+    axp192_t axp;
+    uint8_t buffer = 0x00;
+
+    axp.read = &mock_i2c_read;
+    axp.write = &mock_i2c_write;
+
+    /* ADC registers are read-only. */
+    ASSERT(AXP192_ERROR_ENOTSUP == axp192_write(&axp, AXP192_BATTERY_VOLTAGE, &buffer));
+
+    PASS();
+}
+
 GREATEST_MAIN_DEFS();
 
 int
@@ -79,6 +94,7 @@ main(int argc, char **argv)
     RUN_TEST(should_pass);
     RUN_TEST(should_init);
     RUN_TEST(should_read_battery_voltage);
+    RUN_TEST(should_fail_write_battery_voltage);
 
     GREATEST_MAIN_END();
 }
